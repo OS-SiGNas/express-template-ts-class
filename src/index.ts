@@ -1,8 +1,8 @@
-import Express, { Application } from "express";
+import Express, { Application, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import modules from "./modules";
+import { authRouter, saludoRoutes } from "./modules";
 import { errorHandler } from "./middlewares/errorHandler";
 
 class Server {
@@ -21,7 +21,7 @@ class Server {
     this.#startModules();
   }
 
-  // TODO any connection DB handler
+  // TODO any connection DB method
   async #startDbConnection() {
     console.log(`DB connection handler is empty`);
   }
@@ -29,18 +29,23 @@ class Server {
   #startMidlewares() {
     this.#app.use(this.#debug ? morgan("dev") : morgan("common"));
     this.#app.use(cors());
+    this.#app.use(json());
+
     //this.#app.use(urlencoded())
   }
 
   #startModules() {
-    this.#app.use(modules.saludoRoutes);
+    this.#app.use(authRouter);
+    this.#app.use(saludoRoutes);
+
     // TODO Extensible error handler
     this.#app.use(errorHandler);
   }
 
   run() {
     this.#debug
-      ? console.log("Welcome to Debug Mode")
+      ? console.log(`👽 Welcome to the escalable web service 👽
+            🔥 DEV MODE 🔥`)
       : console.log("Normal Mode");
     this.#app.listen(this.#port, () => {
       console.log(`SERVER running on: ${this.#host}:${this.#port}`);
@@ -49,5 +54,5 @@ class Server {
 }
 
 // const server = new Server("http://localhost", 3333);
-const server = new Server("http://localhost", 3333, true);
+const server: Server = new Server("http://localhost", 3333, true);
 server.run();

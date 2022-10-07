@@ -1,7 +1,9 @@
-import saludoRoutes from "./saludo";
+import { authRouter } from "./Auth";
+import saludoRoutes from "./Saludo";
 //import errorHandler from "./errorHandler";
 
-export default {
+export {
+  authRouter,
   saludoRoutes,
   //errorHandler
 };
