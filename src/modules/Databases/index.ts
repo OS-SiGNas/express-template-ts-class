@@ -1,11 +1,15 @@
-import { WarehouseDB1 } from "myDatabaseObj_one";
-import { WarehouseDB2 } from "myDatabaseObj_two";
-import { WarehouseDB3 } from "myDatabaseObj_three";
+import { myDatabaseObj_one } from "./myDatabaseObj_one";
+import { myDatabaseObj_two } from "./myDatabaseObj_two";
+import { myDatabaseObj_three } from "./myDatabaseObj_three";
 
-/**/
+/*
+const dbObj1 = new WarehouseDB1;
+const dbObj2 = new WarehouseDB2;
+const dbObj3 = new WarehouseDB3;
+ */
 
 export default {
-  WarehouseDB1,
-  WarehouseDB2,
-  WarehouseDB3,
+  myDatabaseObj_one,
+  myDatabaseObj_two,
+  myDatabaseObj_three,
 };
