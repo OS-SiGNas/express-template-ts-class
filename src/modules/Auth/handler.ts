@@ -1,12 +1,8 @@
 import { Request, Response } from "express";
-import { Mongoose } from "mongoose";
-import {} from "../Databases/usersWarehouse";
+//import { usersWarehouse } from "../Databases/usersWarehouse";
+//const db = usersWarehouse();
 
 export class Auth {
-  #db: Mongoose;
-  constructor() {
-    this.#db = usersWarehouse();
-  }
   //	---------------------------------------------- SIGN UP
   async signup(req: Request, res: Response): Promise<void> {
     try {

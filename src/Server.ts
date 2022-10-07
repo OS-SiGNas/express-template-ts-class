@@ -2,7 +2,12 @@ import Express, { Application, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import { authRouter, saludoRouter, errorHandler } from "./modules";
+import {
+  authRouter,
+  checkSession,
+  saludoRouter,
+  errorHandler,
+} from "./modules";
 
 export class Server {
   #host: string;
@@ -15,23 +20,18 @@ export class Server {
     this.#port = port;
     this.#host = host;
     this.#express = Express();
-    //this.#startDbConnection();
     this.#startMidlewares();
     this.#startModules();
   }
 
-  //// TODO any connection DB method
-  //async #startDbConnection() {
-  //console.log(`DB connection handler is empty`);
-  //}
-
-  #startMidlewares() {
+  #startMidlewares(): void {
     this.#express.use(this.#debug ? morgan("dev") : morgan("common"));
     this.#express.use(cors());
     this.#express.use(json());
+    this.#express.use(checkSession);
   }
 
-  #startModules() {
+  #startModules(): void {
     this.#express.use(authRouter);
     this.#express.use(saludoRouter);
     //this.#express.use(api-v1);
@@ -42,12 +42,11 @@ export class Server {
   }
 
   run() {
-    this.#debug
-      ? console.log(`👽 Welcome to the escalable web service 👽
-            🔥 DEV MODE 🔥`)
-      : console.log("Normal Mode");
-    this.#express.listen(this.#port, () => {
+    return this.#express.listen(this.#port, () => {
       console.log(`SERVER running on: ${this.#host}:${this.#port}`);
+      this.#debug
+        ? console.log(`🔥 DEV MODE 🔥 Welcome to the escalable web service 👽`)
+        : console.log("🔥 ON 🔥");
     });
   }
 }
