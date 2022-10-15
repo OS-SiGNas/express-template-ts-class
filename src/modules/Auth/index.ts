@@ -1,14 +1,18 @@
 import { Router } from "express";
 import { Auth } from "./handler";
 import { checkSession } from "./checkSession";
+import { usersWarehouse } from "../Databases";
 
-const auth = new Auth();
-const { signup, signin, profile } = auth;
+const PATH = "/auth";
+const authHandler = new Auth(usersWarehouse);
+const { login, signup, logOut, profile } = authHandler;
 
-const authRouter: Router = Router();
-authRouter
-  .post("/auth/signup", signup)
-  .post("/auth/signin", signin)
-  .post("/auth/profile", profile);
+const auth: Router = Router();
+auth
+  .get(`${PATH}/login`, login)
+  .get(`${PATH}/logOut`, logOut)
+  .get(`${PATH}/signup`, signup)
+  .post(`${PATH}/signup`, signup)
+  .post(`${PATH}/profile`, profile);
 
-export { authRouter, checkSession };
+export { auth, checkSession };

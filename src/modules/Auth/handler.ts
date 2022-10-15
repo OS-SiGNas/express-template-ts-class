@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-//import { usersWarehouse } from "../Databases/usersWarehouse";
-//const db = usersWarehouse();
 
 export class Auth {
+  #db: object;
+  constructor(db: object) {
+    this.#db = db;
+  }
   //	---------------------------------------------- SIGN UP
   async signup(req: Request, res: Response): Promise<void> {
     try {
@@ -17,8 +19,8 @@ export class Auth {
     }
   }
 
-  //	---------------------------------------------- SIGN UP
-  async signin(_req: Request, res: Response): Promise<void> {
+  //	---------------------------------------------- Login
+  async login(_req: Request, res: Response): Promise<void> {
     try {
       res.status(200).json({ msg: `;) sign in` });
     } catch (error) {
@@ -26,6 +28,14 @@ export class Auth {
     }
   }
 
+  //	---------------------------------------------- Log Out
+  async logOut(_req: Request, res: Response): Promise<void> {
+    try {
+      res.status(200).json({ msg: `;) profile` });
+    } catch (error) {
+      res.status(400).json({ error: `ERROR ->${error}` });
+    }
+  }
   //	---------------------------------------------- PROFILE
   async profile(_req: Request, res: Response): Promise<void> {
     try {

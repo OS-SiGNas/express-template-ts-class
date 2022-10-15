@@ -1,17 +1,15 @@
 import { Movies } from "./handler";
 import { Router } from "express";
 
-const r = Router();
-const exec = new Movies();
 const path = "/movies";
 
-r.get(`${path}/:id`, exec.getOne);
-r.get(path, exec.getAll);
+const handler = new Movies();
+const { getOne, getAll, updateOne, createOne, deleteOne } = handler;
 
-r.post(path, exec.createOne);
-
-r.put(`${path}/:id`, exec.updateOne);
-
-r.delete(`${path}/:id`, exec.deleteOne);
-
-export default r;
+export const moviesRouter = Router();
+moviesRouter
+  .get(`${path}/:id`, getOne)
+  .get(path, getAll)
+  .post(path, createOne)
+  .put(`${path}/:id`, updateOne)
+  .delete(`${path}/:id`, deleteOne);
