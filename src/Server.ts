@@ -2,7 +2,13 @@ import Express, { Application, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import { auth, checkSession, saludo, errorHandler } from "./modules";
+import {
+  auth,
+  checkSession,
+  saludo,
+  templateObcect,
+  errorHandler,
+} from "./modules";
 
 export class Server {
   #host: string;
@@ -29,6 +35,8 @@ export class Server {
   #startModules(): void {
     this.#express.use(auth);
     this.#express.use(saludo);
+    this.#express.use(templateObcect);
+
     //this.#express.use(api-v1);
     //this.#express.use(api-v2);
 
