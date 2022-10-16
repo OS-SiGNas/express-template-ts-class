@@ -6,6 +6,7 @@ export class Emmiter {
     //cada array tiene funcinones como valores
     this.#events = {};
   }
-  on() {}
+  on(type,Listener) {}
+  if ( !this.#events[type] ) {}
   emit() {}
 }
