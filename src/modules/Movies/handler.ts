@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 //import any DB handler
 
-export class Movies {
+export class MoviesHandler {
   /*
   #dbConn;
 

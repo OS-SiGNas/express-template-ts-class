@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const { MONGO_PASS, MONGO_URI_HEADER, MONGO_CLUSTER } = process.env;
-console.log(`=> ${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`);
+//console.log(`=> ${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`);
 const uri = `${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`;
 //const options = {};
 

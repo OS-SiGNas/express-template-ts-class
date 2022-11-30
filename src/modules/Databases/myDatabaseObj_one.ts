@@ -1,4 +1,48 @@
-export const myDatabaseObj_one = () => {
-  //TODO: one Object Connection
-  console.log(`TODO: one Object Connection`);
-};
+import { User } from "../Users";
+
+export const DBOBJTEST: Array<User> = [
+  {
+    id: 1,
+    username: "signas13",
+    password: "testing12345",
+    name: "Alfredo Manrique",
+    telf: "+58 000 000 0000",
+    email: "signas13@gmail.com",
+    active: true,
+    registered: "2022-21-10",
+    rol: ["Admin", "Developer"],
+  },
+  {
+    id: 2,
+    username: "caos",
+    password: "testing12345",
+    name: "Penelope Castalla",
+    telf: "+58 020 000 0000",
+    email: "penelopeozz@gmail.com",
+    active: true,
+    registered: "2022-21-10",
+    rol: ["user"],
+  },
+  {
+    id: 3,
+    username: "osck",
+    password: "testing12345",
+    name: "Ezequiel Montes",
+    telf: "+58 050 000 0000",
+    email: "osk1241@gmail.com",
+    active: true,
+    registered: "2022-21-10",
+    rol: ["Developer"],
+  },
+  {
+    id: 4,
+    username: "rellee",
+    password: "testing12345",
+    name: "Rene Arieta",
+    telf: "+58 060 000 0000",
+    email: "relle@gmail.com",
+    active: true,
+    registered: "2022-21-10",
+    rol: ["user"],
+  },
+];

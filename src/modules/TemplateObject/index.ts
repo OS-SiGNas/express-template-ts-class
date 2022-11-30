@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { TemplateObcect } from "./handler";
+import { TemplateObject } from "./handler";
 
 /*
  * Import db connection Object here: new TemplateObcect(dbObject);
  * Export object with same name in singular camelcase
- * Example: export {templateObcect}
+ * Example: export {templateObject}
  */
 
 const PATH = "/example";
-const templateObcectHandler = new TemplateObcect();
-const { asyncMethod, syncMethod } = templateObcectHandler;
+const templateObjectHandler = new TemplateObject();
+const { asyncMethod, syncMethod } = templateObjectHandler;
 
-export const templateObcect: Router = Router();
-templateObcect
+export const templateObject: Router = Router();
+templateObject
   .get(`${PATH}/async`, asyncMethod)
   .get(`${PATH}/sync`, syncMethod);

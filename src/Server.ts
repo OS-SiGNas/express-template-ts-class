@@ -1,20 +1,16 @@
 import Express, { Application, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
-import {
-  auth,
-  checkSession,
-  saludo,
-  templateObcect,
-  errorHandler,
-} from "./modules";
+import { auth, saludo, templateObject, errorHandler } from "./modules";
 
 export class Server {
   #host: string;
   #port: number;
   #express: Application;
   #debug: boolean;
+  //#eventBus: boolean;
 
   constructor(host: string, port: number, debug: boolean = false) {
     this.#debug = debug;
@@ -29,16 +25,15 @@ export class Server {
     this.#express.use(this.#debug ? morgan("dev") : morgan("common"));
     this.#express.use(cors());
     this.#express.use(json());
-    this.#express.use(checkSession);
+    this.#express.use(cookieParser());
   }
 
   #startModules(): void {
     this.#express.use(auth);
     this.#express.use(saludo);
-    this.#express.use(templateObcect);
+    this.#express.use(templateObject);
 
     //this.#express.use(api-v1);
-    //this.#express.use(api-v2);
 
     // TODO Extensible error handler
     this.#express.use(errorHandler);
@@ -46,10 +41,10 @@ export class Server {
 
   run() {
     return this.#express.listen(this.#port, () => {
-      console.log(`SERVER running on: ${this.#host}:${this.#port}`);
       this.#debug
-        ? console.log(`🔥 DEV MODE 🔥 Welcome to the escalable web service 👽`)
+        ? console.log("🔥 DEV MODE 🔥\nWelcome to the escalable web service 👽")
         : console.log("🔥 ON 🔥");
+      console.log(`SERVER running on: ${this.#host}:${this.#port}`);
     });
   }
 }
