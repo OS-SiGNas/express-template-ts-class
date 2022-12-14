@@ -7,8 +7,7 @@ const { MONGO_PASS, MONGO_URI_HEADER, MONGO_CLUSTER } = process.env;
 //console.log(`=> ${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`);
 const uri = `${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`;
 //const options = {};
-
-export const usersWarehouse = async () => {
+const usersWarehouse = async () => {
   try {
     const conn = await mongoose.connect(uri);
     console.log("COOONEEEECTT");
@@ -17,3 +16,5 @@ export const usersWarehouse = async () => {
     console.error(`Ups! 👉 ${error.message}`);
   }
 };
+
+export { usersWarehouse };

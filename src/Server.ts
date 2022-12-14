@@ -2,7 +2,7 @@ import Express, { Application, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+// ->
 import { auth, saludo, templateObject, errorHandler } from "./modules";
 
 export class Server {
@@ -42,7 +42,7 @@ export class Server {
   run() {
     return this.#express.listen(this.#port, () => {
       this.#debug
-        ? console.log("🔥 DEV MODE 🔥\nWelcome to the escalable web service 👽")
+        ? console.log("👽 Welcome to the escalable web service\n🔥 DEV MODE 🔥")
         : console.log("🔥 ON 🔥");
       console.log(`SERVER running on: ${this.#host}:${this.#port}`);
     });

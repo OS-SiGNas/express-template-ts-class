@@ -1,12 +1,17 @@
-export class Emmiter {
-  #events: object;
+import EventHandler from "events";
 
-  constructor() {
-    //Objeto plano Js que almacena arrays.
-    //cada array tiene funcinones como valores
-    this.#events = {};
-  }
-  on(type,Listener) {}
-  if ( !this.#events[type] ) {}
-  emit() {}
-}
+const eventBus = new EventHandler();
+
+eventBus.on("newUser", () => {
+  console.log("Creando nuevo usuario");
+});
+
+eventBus.emit("newUser");
+
+/*
+eventBus.on("anyEventNameString", () => {
+  console.log("any function callback");
+});
+
+eventBus.emit("anyEventNameString");
+*/
