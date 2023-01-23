@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
-import { checkUserAndPassword } from "./services";
-//import {} from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
+import { checkUserAndPassword, getUserById } from "./services";
+
+import { config } from "../Config";
+const { secretKey } = config;
 
 class AuthHandler {
   //	---------------------------------------------- Login
-  async login(req: Request, res: Response): Promise<Response> {
+  async login(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
@@ -12,17 +15,25 @@ class AuthHandler {
       } else {
         const user = await checkUserAndPassword(username, password);
         if (!user) return res.sendStatus(401);
-        return res.status(200).json({ message: `Welcome ${user.username}` });
+        //console.log(user);
+        // ==> building Token
+        const token: string = sign(
+          { id: user.id, username: user.username },
+          secretKey,
+          {
+            expiresIn: 3600,
+          }
+        );
+        return res.status(200).json({ token });
       }
     } catch (error) {
       console.error(error);
-
       res.status(400).json({ error: `ERROR -> ${error}` });
     }
   }
 
-  //	---------------------------------------------- SIGN UP
-  async signup(req: Request, res: Response): Promise<Response> {
+  //	---------------------------------------------- REGISTER
+  async register(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
       return res.status(201).json({
@@ -35,18 +46,14 @@ class AuthHandler {
     }
   }
 
-  //	---------------------------------------------- Log Out
-  async logOut(_req: Request, res: Response): Promise<Response> {
-    try {
-      return res.status(200).json({ msg: `;) profile` });
-    } catch (error) {
-      res.status(400).json({ error: `ERROR ->${error}` });
-    }
-  }
   //	---------------------------------------------- PROFILE
-  async profile(_req: Request, res: Response): Promise<void> {
+  async profile(req: Request, res: Response) {
     try {
-      res.status(200).json({ msg: `;) profile` });
+      const { id } = req.body.dataToken;
+      //console.log(req.body.dataToken);
+      const { username, name, email, telf, active, registered, rol } =
+        await getUserById(id);
+      res.json({ username, name, email, telf, active, registered, rol });
     } catch (error) {
       res.status(400).json({ error: `ERROR ->${error}` });
     }

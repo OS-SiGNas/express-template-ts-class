@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 // ->
-import { auth, saludo, templateObject, errorHandler } from "./modules";
+import { auth, saludo, poke, templateObject, errorHandler } from "../index";
 
 export class Server {
   #host: string;
@@ -32,6 +32,7 @@ export class Server {
     this.#express.use(auth);
     this.#express.use(saludo);
     this.#express.use(templateObject);
+    this.#express.use(poke);
 
     //this.#express.use(api-v1);
 
@@ -40,7 +41,7 @@ export class Server {
   }
 
   run() {
-    return this.#express.listen(this.#port, () => {
+    return this.#express.listen(this.#port, (): void => {
       this.#debug
         ? console.log("👽 Welcome to the escalable web service\n🔥 DEV MODE 🔥")
         : console.log("🔥 ON 🔥");

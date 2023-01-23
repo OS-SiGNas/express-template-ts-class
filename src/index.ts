@@ -1,8 +1,10 @@
-import { Server } from "./Server";
-//import { config } from "./modules/config"
+import { Server } from "./modules/Server";
+import dotenv from "dotenv";
 
+dotenv.config();
+
+const port = Number(process.env.PORT || 3000);
 const host = `http://localhost`;
-const port = 3333;
-const server: Server = new Server(host, port, true);
 
+const server = new Server(host, port, true);
 server.run();

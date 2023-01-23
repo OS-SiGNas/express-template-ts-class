@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
+import { verify } from "jsonwebtoken";
+import { config } from "../Config";
+const { secretKey } = config;
 
-export const checkSession = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const headerAuth = req.params.token || "";
-  //TODO Bearer 12312321
-  const token = headerAuth.split(" ").pop();
-  !token ? res.status(405) : res.send({ error: "No tienes permisos" });
-  next();
+export const checkSession: RequestHandler = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (typeof authorization === "undefined") return res.sendStatus(403);
+  const token = authorization.split(" ").pop();
+  const payload = verify(token || "", secretKey);
+  req.body.dataToken = payload;
+  return next();
 };

@@ -17,7 +17,7 @@ export class TemplateObject {
         message: "TemplateObcect with any async method",
       });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   }
 
