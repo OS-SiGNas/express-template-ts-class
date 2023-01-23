@@ -16,7 +16,7 @@ export class Saludo {
       });
     } catch (err) {
       console.error(err);
-      res.json({
+      return res.json({
         status: 400,
         message: `${err}`,
       });

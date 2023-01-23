@@ -28,7 +28,7 @@ class AuthHandler {
       }
     } catch (error) {
       console.error(error);
-      res.status(400).json({ error: `ERROR -> ${error}` });
+      return res.status(400).json({ error: `ERROR -> ${error}` });
     }
   }
 
@@ -42,7 +42,7 @@ class AuthHandler {
         message: "Success",
       });
     } catch (error) {
-      res.status(400).json({ error: `ERROR ->${error}` });
+      return res.status(400).json({ error: `ERROR ->${error}` });
     }
   }
 
@@ -53,9 +53,9 @@ class AuthHandler {
       //console.log(req.body.dataToken);
       const { username, name, email, telf, active, registered, rol } =
         await getUserById(id);
-      res.json({ username, name, email, telf, active, registered, rol });
+      return res.json({ username, name, email, telf, active, registered, rol });
     } catch (error) {
-      res.status(400).json({ error: `ERROR ->${error}` });
+      return res.status(400).json({ error: `ERROR ->${error}` });
     }
   }
 }

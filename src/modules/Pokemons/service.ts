@@ -1,4 +1,4 @@
-import { get } from "mongoose";
+//import { get } from "mongoose";
 import fetch from "node-fetch";
 
 export const getPokemonByName = async (name: string) => {

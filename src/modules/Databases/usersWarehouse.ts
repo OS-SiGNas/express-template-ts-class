@@ -14,6 +14,6 @@ export const usersWarehouse = async () => {
     console.log("COOONEEEECTT");
     return conn;
   } catch (error) {
-    console.error(error);
+    return console.error(error);
   }
 };
