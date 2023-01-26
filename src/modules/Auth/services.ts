@@ -1,25 +1,28 @@
+import { IUser } from "../../types";
 import { DBOBJTEST } from "../Databases";
 
-export const checkUserAndPassword = async (
+export const checkUserAndPassword = (
   username: string,
   password: string
-) => {
+): IUser | undefined => {
   try {
-    const user = await DBOBJTEST.find((user) => user.username === username);
+    const user = DBOBJTEST.find((user) => user.username === username);
     if (!user) throw new Error();
     if (user.password !== password) throw new Error();
     return user;
   } catch (error) {
     console.error(error);
+    return undefined;
   }
 };
 
-export const getUserById = async (id: number) => {
+export const getUserById = (id: number): IUser | undefined => {
   try {
-    const user = await DBOBJTEST.find((user) => user.id === id);
+    const user = DBOBJTEST.find((user) => user.id === id);
     if (!user) throw new Error();
     return user;
   } catch (error) {
     console.error(error);
+    return undefined;
   }
 };

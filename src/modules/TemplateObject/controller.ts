@@ -1,14 +1,6 @@
 import { Request, Response } from "express";
 
 export class TemplateObject {
-  /* TODO
-  #db:dbObject;
-
-  constructor(db:dbObject) {
-    this.#db = db;
-  }
-  */
-
   async asyncMethod(req: Request, res: Response): Promise<void> {
     try {
       console.log(`Any Async Method ${req.header}`);

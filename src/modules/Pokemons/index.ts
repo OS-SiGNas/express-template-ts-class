@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from "express";
-import { checkSession } from "../AuthToken/checkSession";
-import { getOne } from "./handler";
+import { checkSession } from "../Auth/checkSession";
+import { getOne } from "./controller";
 
 const testHandler: RequestHandler = (_req, _res) => {
   console.log("-> -> pass");

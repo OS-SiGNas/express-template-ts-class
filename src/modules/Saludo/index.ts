@@ -1,4 +1,4 @@
-import { Saludo } from "./handler";
+import { Saludo } from "./controller";
 import { Router } from "express";
 
 const saludoHandler = new Saludo();

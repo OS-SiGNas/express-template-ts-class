@@ -1,7 +1,20 @@
 import { Request, Response } from "express";
-import { checkUserAndPassword } from "./services";
+import { checkUserAndPassword } from "../services";
+import { v4 } from "uuid";
 
-class AuthHandler {
+const _sessions: Array<string> = [];
+
+export class AuthController {
+  async getSessions(_req: Request, res: Response): Promise<Response> {
+    try {
+      console.log(_sessions);
+      return res.status(200).json({ sessions: `${_sessions}` });
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json({ error: `ERROR -> ${error}` });
+    }
+  }
+
   //	---------------------------------------------- Login
   async login(req: Request, res: Response): Promise<Response> {
     try {
@@ -11,12 +24,18 @@ class AuthHandler {
       } else {
         const user = await checkUserAndPassword(username, password);
         if (!user) return res.sendStatus(401);
-        return res.status(200).json({ message: `Welcome ${user.username}` });
+        const sessionID = v4();
+        if (_sessions.find((session) => session === sessionID) !== undefined) {
+          return res.status(400).json({ message: "Duplicada" });
+        } else {
+          //TODO sessionID -> user session tables or documents
+          _sessions.push(sessionID);
+          return res.status(200).json({ message: `Welcome ${user.username}` });
+        }
       }
     } catch (error) {
       console.error(error);
-
-      res.status(400).json({ error: `ERROR -> ${error}` });
+      return res.status(400).json({ error: `ERROR -> ${error}` });
     }
   }
 
@@ -30,7 +49,7 @@ class AuthHandler {
         message: "Success",
       });
     } catch (error) {
-      res.status(400).json({ error: `ERROR ->${error}` });
+      return res.status(400).json({ error: `ERROR ->${error}` });
     }
   }
 
@@ -39,7 +58,7 @@ class AuthHandler {
     try {
       return res.status(200).json({ msg: `;) profile` });
     } catch (error) {
-      res.status(400).json({ error: `ERROR ->${error}` });
+      return res.status(400).json({ error: `ERROR ->${error}` });
     }
   }
   //	---------------------------------------------- PROFILE
@@ -51,6 +70,3 @@ class AuthHandler {
     }
   }
 }
-
-//const service = new AuthSerices();
-export const authHandler = new AuthHandler();

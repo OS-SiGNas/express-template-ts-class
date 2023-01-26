@@ -6,16 +6,14 @@ import cookieParser from "cookie-parser";
 import { auth, saludo, poke, templateObject, errorHandler } from "../index";
 
 export class Server {
-  #host: string;
   #port: number;
   #express: Application;
   #debug: boolean;
   //#eventBus: boolean;
 
-  constructor(host: string, port: number, debug: boolean = false) {
+  constructor(port: number, debug: boolean = false) {
     this.#debug = debug;
     this.#port = port;
-    this.#host = host;
     this.#express = Express();
     this.#startMidlewares();
     this.#startModules();
@@ -40,12 +38,11 @@ export class Server {
     this.#express.use(errorHandler);
   }
 
-  run() {
+  public async run() {
+    const message: string = this.#debug ? "👽 DEV MODE 👽" : "🔥 ON 🔥";
     return this.#express.listen(this.#port, (): void => {
-      this.#debug
-        ? console.log("👽 Welcome to the escalable web service\n🔥 DEV MODE 🔥")
-        : console.log("🔥 ON 🔥");
-      console.log(`SERVER running on: ${this.#host}:${this.#port}`);
+      console.log(`\x1b[33m ${message}\x1b[0m`);
+      console.log(`SERVER running on: http://localhost:${this.#port}`);
     });
   }
 }

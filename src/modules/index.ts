@@ -1,9 +1,7 @@
-import { Server } from "./Server";
-import { auth } from "./AuthToken";
-import { errorHandler } from "./ErrorHandler";
-import { saludo } from "./Saludo";
-import { templateObject } from "./TemplateObject";
-import { poke } from "./Pokemons";
-//import {} from "./Movies"
-
-export { Server, auth, saludo, poke, templateObject, errorHandler };
+export { Server } from "./Server";
+export { auth } from "./Auth";
+export { errorHandler } from "./ErrorHandler";
+export { saludo } from "./Saludo";
+export { templateObject } from "./TemplateObject";
+export { poke } from "./Pokemons";
+//export {} from "./Movies"

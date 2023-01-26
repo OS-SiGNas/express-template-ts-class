@@ -1,6 +1,6 @@
-import { User } from "../Users";
+import { IUser } from "../../types";
 
-export const DBOBJTEST: Array<User> = [
+export const DBOBJTEST: IUser[] = [
   {
     id: 1,
     username: "signas13",

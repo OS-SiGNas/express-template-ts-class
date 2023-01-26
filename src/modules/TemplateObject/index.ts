@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { TemplateObject } from "./handler";
+import { TemplateObject } from "./controller";
 
 /*
  * Import db connection Object here: new TemplateObcect(dbObject);
@@ -8,10 +8,8 @@ import { TemplateObject } from "./handler";
  */
 
 const PATH = "/example";
-const templateObjectHandler = new TemplateObject();
-const { asyncMethod, syncMethod } = templateObjectHandler;
+const templateObjectController = new TemplateObject();
+const { asyncMethod, syncMethod } = templateObjectController;
 
 export const templateObject: Router = Router();
-templateObject
-  .get(`${PATH}/async`, asyncMethod)
-  .get(`${PATH}/sync`, syncMethod);
+templateObject.get(`${PATH}/async`, asyncMethod).get(`${PATH}/sync`, syncMethod);

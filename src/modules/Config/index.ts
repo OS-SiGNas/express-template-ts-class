@@ -1,22 +1,16 @@
 import dotenv from "dotenv";
-dotenv.config();
-const { PORT, JWT_SECRET, MONGO_PASS, MONGO_URI_HEADER, MONGO_CLUSTER } =
-  process.env;
 
-type Config = {
+class Config {
   secretKey: string;
   port: number;
-  host: string;
-  dbPass: string;
   dbURI: string;
-};
+  constructor() {
+    dotenv.config();
+    const { PORT, JWT_SECRET, MONGO_URI_HEADER, MONGO_PASS, MONGO_CLUSTER } = process.env;
+    this.secretKey = String(JWT_SECRET);
+    this.port = Number(PORT);
+    this.dbURI = `${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`;
+  }
+}
 
-export const config: Config = {
-  secretKey: String(JWT_SECRET),
-  port: Number(PORT) || 3000,
-  host: "http://localhost",
-  dbPass: String(MONGO_PASS),
-  dbURI: `${MONGO_URI_HEADER}${MONGO_CLUSTER}`,
-};
-
-//console.log(typeof config.secretKey);
+export const config: Config = new Config();
