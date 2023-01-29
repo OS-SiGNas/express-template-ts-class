@@ -1,14 +1,13 @@
-// TOKEN
-import { Router } from "express";
-import { authHandler } from "./controller";
-import { checkSession } from "./checkSession";
+import { Router } from 'express'
+import { AuthController } from './controller'
+// import { checkSession } from './checkSession'
 
-const { login, register, profile } = authHandler;
+const r: Router = Router()
+const authController = new AuthController()
 
-const r: Router = Router();
+r.post('/register', authController.register)
+r.get('/login', authController.login)
+// r.post('/profile', authController.profile)
 
-r.get(`/login`, login).post(`/register`, register).post(`/profile`, checkSession, profile);
-
-const auth: Router = Router();
-auth.use("/auth", r);
-export { auth, checkSession };
+export const auth = Router()
+auth.use('/auth', r)

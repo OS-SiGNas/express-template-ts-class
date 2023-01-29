@@ -1,35 +1,27 @@
-import { Schema, model } from "mongoose";
-import { IUser } from "../../types";
+import { prop, getModelForClass } from '@typegoose/typegoose'
+import { type Rol } from '../../types'
 
-const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    min: 4,
-    lowercase: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    min: 4,
-    lowercase: true,
-  },
-  name: {
-    type: String,
-    lowercase: true,
-    required: true,
-  },
-  telf: {
-    type: String,
-    required: true,
-  },
-  active: Boolean,
-  registered: String,
-  rol: Array<String>,
-});
+export class User {
+  @prop({ required: true })
+    username: string
 
-export default model<IUser>("User", userSchema);
+  @prop({ required: true, minlength: 8 })
+    password: string
+
+  @prop({ required: true, trim: true })
+    email: string
+
+  @prop({ required: true })
+    name: string
+
+  @prop({ required: true })
+    telf: string
+
+  @prop({ required: true })
+    active: boolean
+
+  @prop({ required: true })
+    rol: Rol[]
+}
+
+export const UserModel = getModelForClass(User)

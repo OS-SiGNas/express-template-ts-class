@@ -1,13 +1,18 @@
-import { RequestHandler } from "express";
-import { verify } from "jsonwebtoken";
-import { config } from "../Config";
-const { secretKey } = config;
+import { type Request, type Response, type NextFunction } from 'express';
+import { verify } from 'jsonwebtoken';
+import { config } from '../Config';
 
-export const checkSession: RequestHandler = (req, res, next) => {
+export const checkSession = (req: Request, res: Response, next: NextFunction): Response | undefined => {
   const { authorization } = req.headers;
-  if (typeof authorization === "undefined") return res.sendStatus(403);
-  const token = authorization.split(" ").pop();
-  const payload = verify(token || "", secretKey);
-  req.body.dataToken = payload;
-  return next();
+  if (authorization === undefined) return res.sendStatus(403);
+  const token = String(authorization.split(' ').pop());
+  try {
+    const payload = verify(token, config.getJwtSecretKey());
+    req.body.dataToken = payload;
+    next();
+    return undefined;
+  } catch (error: any) {
+    if (error.message === 'invalid signatured') return res.status(401).json({ error });
+    return res.status(400).json({ error });
+  }
 };
