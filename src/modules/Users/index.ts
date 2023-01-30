@@ -1,15 +1,16 @@
-import { Router } from 'express'
-import { UsersController } from './controller'
+import { Router } from 'express';
+import { UsersController } from './controller';
 // import { checkSession } from './checkSession'
 
-const r: Router = Router()
-const userController = new UsersController()
+export class Users extends UsersController {
+  router: Router;
+  constructor() {
+    super();
 
-r.get('/', userController.getAllUsers)
-r.get('/:_id', userController.getOneUser)
-r.put('/:_id', userController.updateUser)
-r.delete('/:_id', userController.deleteUser)
-// r.post('/profile', checkSession, authController.profile)
-
-export const users = Router()
-users.use('/users', r)
+    this.router = Router();
+    this.router.get('/', this.getUsers);
+    this.router.get('/:_id', this.getOneUser);
+    this.router.put('/:_id', this.updateUser);
+    this.router.delete('/:_id', this.deleteUser);
+  }
+}

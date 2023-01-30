@@ -4,7 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 // ->
-import { config, auth, users, saludo, poke, templateObject } from '../index';
+import { config, Auth, Users, saludo, poke, templateObject } from '../index';
 
 export class Server {
   #port: number;
@@ -22,32 +22,27 @@ export class Server {
     this.#startModules();
   }
 
-  #startMidlewares(): void {
+  #startMidlewares = (): void => {
     this.#express.use(this.#debug ? morgan('dev') : morgan('common'));
     this.#express.use(cors());
     this.#express.use(json());
     this.#express.use(cookieParser());
-  }
+  };
 
-  #startModules(): void {
-    this.#express.use(auth);
-    this.#express.use(users);
+  #startModules = (): void => {
+    this.#express.use('/auth', new Auth().router);
+    this.#express.use('/users', new Users().router);
     this.#express.use(saludo);
     this.#express.use(templateObject);
     this.#express.use(poke);
+  };
 
-    // this.#express.use(api-v1);
-
-    // TODO Extensible error handler
-    // this.#express.use(errorHandler)
-  }
-
-  async #startDbConnection(): Promise<void> {
+  #startDbConnection = async (): Promise<void> => {
     mongoose.set('strictQuery', false);
     await mongoose.connect(this.#dbUri);
-  }
+  };
 
-  public async run(): Promise<void> {
+  public run = async (): Promise<void> => {
     try {
       await this.#startDbConnection();
       this.#express.listen(this.#port, (): void => {
@@ -57,5 +52,5 @@ export class Server {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 }

@@ -1,13 +1,15 @@
-import { Router } from 'express'
-import { AuthController } from './controller'
+import { Router } from 'express';
+import { AuthController } from './controller';
 // import { checkSession } from './checkSession'
 
-const r: Router = Router()
-const authController = new AuthController()
+export class Auth extends AuthController {
+  router: Router;
+  constructor() {
+    super();
 
-r.post('/register', authController.register)
-r.get('/login', authController.login)
-// r.post('/profile', authController.profile)
-
-export const auth = Router()
-auth.use('/auth', r)
+    this.router = Router();
+    this.router.post('/register', this.register);
+    this.router.get('/login', this.login);
+    //this.router.post('/profile', this.profile)
+  }
+}
