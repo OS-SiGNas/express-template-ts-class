@@ -1,16 +1,24 @@
 import { Router } from 'express';
+import { httpResponse } from '../Response/httpResponse';
 import { UsersController } from './controller';
-// import { checkSession } from './checkSession'
+import { userService } from './service';
+import { checkSession } from './middlewares';
 
-export class Users extends UsersController {
+class UsersRouter extends UsersController {
   router: Router;
   constructor() {
-    super();
+    super(httpResponse, userService);
 
     this.router = Router();
+
+    this.router.post('/auth', this.login);
+
+    this.router.use(checkSession);
     this.router.get('/', this.getUsers);
     this.router.get('/:_id', this.getOneUser);
     this.router.put('/:_id', this.updateUser);
     this.router.delete('/:_id', this.deleteUser);
   }
 }
+
+export const users = new UsersRouter().router;

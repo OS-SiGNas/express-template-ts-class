@@ -1,15 +1,18 @@
-import { RequestHandler, Router } from "express";
-import { checkSession } from "../Auth/checkSession";
-import { getOne } from "./controller";
+import { Router } from 'express';
+import { httpResponse } from '../Response/httpResponse';
+import { PokemonController } from './controller';
+import { pokemonService } from './service';
+import { checkSession } from '../Users/middlewares';
 
-const testHandler: RequestHandler = (_req, _res) => {
-  console.log("-> -> pass");
-};
+class PokemonRouter extends PokemonController {
+  router: Router;
 
-const r: Router = Router();
+  constructor() {
+    super(httpResponse, pokemonService);
 
-r.get(`/test/`, checkSession, testHandler);
-r.get(`/getOne/:name`, checkSession, getOne);
+    this.router = Router();
+    this.router.get(`/:name`, checkSession, this.getOne);
+  }
+}
 
-export const poke: Router = Router();
-poke.use("/pokemon", r);
+export const poke = new PokemonRouter().router;

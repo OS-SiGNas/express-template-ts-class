@@ -1,11 +1,20 @@
-import { Saludo } from "./controller";
-import { Router } from "express";
+import { Router } from 'express';
+import { httpResponse } from '../Response/httpResponse';
+import { SaludoController } from './controller';
+import { saludoService } from './service';
 
-const saludoHandler = new Saludo();
-const { saludar } = saludoHandler;
+class SaludoRouter extends SaludoController {
+  router: Router;
+  constructor() {
+    super(httpResponse, saludoService);
 
-export const saludo = Router();
-saludo.get("/saludo", saludar);
-//.post("/saludo", saludo.enseniar)
-//.put("/saludo", saludo.aprender)
-//.delete("/saludo", saludo.olvidar)
+    this.router = Router();
+    this.router.get('/:name', this.saludar);
+
+    //this.router.post('/saludo', this.enseniar);
+    //this.router.put('/saludo', this.aprender);
+    //this.router.delete('/saludo', this.olvidar);
+  }
+}
+
+export const saludo = new SaludoRouter().router;

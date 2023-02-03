@@ -1,26 +1,24 @@
-import { Request, Response } from "express";
-import fetch from "node-fetch";
+import { Request, Response } from 'express';
+import { SaludoService } from './service';
+import { HttpResponse } from '../Response/httpResponse';
 
-export class Saludo {
-  async saludar(_req: Request, res: Response) {
-    try {
-      //console.log(req.url);
-      const responseSaludo = await fetch("http://localhost:5555/hola/Alfredo");
-      const response = await responseSaludo.json();
-      //console.log(response);
-      const { mensaje, status } = response;
-      return res.json({
-        status,
-        language: "es-VE",
-        data: mensaje,
-      });
-    } catch (err) {
-      console.error(err);
-      return res.json({
-        status: 400,
-        message: `${err}`,
-      });
-    }
+export class SaludoController {
+  #response: HttpResponse;
+  #service: SaludoService;
+  constructor(httpResponse: HttpResponse, saludoService: SaludoService) {
+    this.#response = httpResponse;
+    this.#service = saludoService;
   }
+  saludar = async (req: Request, res: Response): Promise<Response> => {
+    const { name } = req.params;
+    console.log(name);
+
+    try {
+      const responseSaludo = await this.#service.getSaludo(`/hola/${name}`);
+      return this.#response.ok(res, { language: 'es-VE', responseSaludo });
+    } catch (error) {
+      console.error(error);
+      return this.#response.error(res, error);
+    }
+  };
 }
-//export const saludo = new Saludo();

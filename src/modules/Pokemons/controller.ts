@@ -1,12 +1,22 @@
-import { RequestHandler } from "express";
-import { getPokemonByName } from "./service";
+import { type Request, type Response } from 'express';
+import { type HttpResponse } from '../Response/httpResponse';
+import { PokemonService } from './service';
 
-export const getOne: RequestHandler = async (req, res) => {
-  const { name } = req.params;
-  try {
-    const data = await getPokemonByName(name);
-    res.status(200).json({ data });
-  } catch (error) {
-    res.status(400).send("Error finding pokemon");
+export class PokemonController {
+  #response: HttpResponse;
+  #service: PokemonService;
+  constructor(httpResponse: HttpResponse, pokemonService: PokemonService) {
+    this.#response = httpResponse;
+    this.#service = pokemonService;
   }
-};
+
+  getOne = async (req: Request, res: Response): Promise<Response> => {
+    const { name } = req.params;
+    try {
+      const data = await this.#service.getPokemonByName(name);
+      return this.#response.ok(res, data);
+    } catch (error) {
+      return this.#response.error(res, error);
+    }
+  };
+}

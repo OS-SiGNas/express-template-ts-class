@@ -4,17 +4,15 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 // ->
-import { config, Auth, Users, saludo, poke, templateObject } from '../index';
+import { config, users, saludo, poke } from '../index';
 
 export class Server {
+  #app: Application;
   #port: number;
-  #express: Application;
   #dbUri: string;
   #debug: boolean;
-  // #eventBus: boolean;
-
   constructor() {
-    this.#express = Express();
+    this.#app = Express();
     this.#port = config.getPort();
     this.#dbUri = config.getDbUri();
     this.#debug = config.getEnvironment();
@@ -23,18 +21,16 @@ export class Server {
   }
 
   #startMidlewares = (): void => {
-    this.#express.use(this.#debug ? morgan('dev') : morgan('common'));
-    this.#express.use(cors());
-    this.#express.use(json());
-    this.#express.use(cookieParser());
+    this.#app.use(this.#debug ? morgan('dev') : morgan('common'));
+    this.#app.use(cors());
+    this.#app.use(json());
+    this.#app.use(cookieParser());
   };
 
   #startModules = (): void => {
-    this.#express.use('/auth', new Auth().router);
-    this.#express.use('/users', new Users().router);
-    this.#express.use(saludo);
-    this.#express.use(templateObject);
-    this.#express.use(poke);
+    this.#app.use('/users', users);
+    this.#app.use('/pokemons', poke);
+    this.#app.use('/saludo', saludo);
   };
 
   #startDbConnection = async (): Promise<void> => {
@@ -45,9 +41,9 @@ export class Server {
   public run = async (): Promise<void> => {
     try {
       await this.#startDbConnection();
-      this.#express.listen(this.#port, (): void => {
+      this.#app.listen(this.#port, (): void => {
         const message = this.#debug ? '👽 DEV MODE 👽' : '🔥 ON 🔥';
-        console.log(`\x1b[33m ${message}\x1b[0m\nSERVER running on: http://localhost:${this.#port}`);
+        console.info(`\x1b[33m ${message}\x1b[0m\nSERVER running on: http://localhost:${this.#port}`);
       });
     } catch (error) {
       console.error(error);
