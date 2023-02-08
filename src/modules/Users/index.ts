@@ -11,9 +11,11 @@ class UsersRouter extends UsersController {
 
     this.router = Router();
 
-    this.router.post('/auth', this.login);
+    this.router.post('/auth', this.auth);
 
+    //middleware
     this.router.use(checkSession);
+
     this.router.get('/', this.getUsers);
     this.router.get('/:_id', this.getOneUser);
     this.router.put('/:_id', this.updateUser);

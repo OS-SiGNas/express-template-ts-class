@@ -1,4 +1,4 @@
-import { Server } from './modules';
+import { Server, config } from './modules';
 
-const server = new Server();
+const server = new Server(config);
 server.run();

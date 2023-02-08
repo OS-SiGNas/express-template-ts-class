@@ -5,7 +5,7 @@
   "main": "bin/index.js",
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1",
-    "dev": "export NODE_ENV=dev && ts-node-dev src/index.ts",
+    "dev": "export NODE_ENV=DEV && ts-node-dev src/index.ts",
     "start": "tsc && node bin/index.js"
   },
   "keywords": [],

@@ -1,16 +1,16 @@
 import dotenv from 'dotenv';
 
-class Config {
+export class Config {
   #secretKey: string;
   #port: number;
   #dbURI: string;
   #apiSaludo: string;
-  #debug: boolean;
+  #environment: string;
 
   constructor() {
     dotenv.config();
     const { NODE_ENV, PORT, JWT_SECRET, MONGO_URI_HEADER, MONGO_PASS, MONGO_CLUSTER, API_SALUDO } = process.env;
-    this.#debug = NODE_ENV === 'dev';
+    this.#environment = String(NODE_ENV);
     this.#port = Number(PORT);
     this.#secretKey = String(JWT_SECRET);
     this.#apiSaludo = String(API_SALUDO);
@@ -33,8 +33,8 @@ class Config {
     return this.#port;
   };
 
-  public getEnvironment = (): boolean => {
-    return this.#debug;
+  public getEnvironment = (): string => {
+    return this.#environment;
   };
 }
 

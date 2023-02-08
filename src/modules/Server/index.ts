@@ -4,18 +4,18 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 // ->
-import { config, users, saludo, poke } from '../index';
+import { type Config, users, saludo, poke } from '../index';
 
 export class Server {
   #app: Application;
   #port: number;
   #dbUri: string;
   #debug: boolean;
-  constructor() {
+  constructor(config: Config) {
     this.#app = Express();
     this.#port = config.getPort();
     this.#dbUri = config.getDbUri();
-    this.#debug = config.getEnvironment();
+    this.#debug = config.getEnvironment() === 'DEV';
     this.#startMidlewares();
     this.#startModules();
   }

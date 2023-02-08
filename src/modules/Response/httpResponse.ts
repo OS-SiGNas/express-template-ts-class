@@ -24,68 +24,68 @@ export class HttpResponse {
   /* console.log(data) */
   /* } */
 
-  public ok(res: Response, data?: any): Response {
+  public ok = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#OK).json({
       status: this.#OK,
       statusMsg: 'Success 👌',
       data,
     });
-  }
+  };
 
-  public created(res: Response, data?: any): Response {
+  public created = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#CREATED).json({
       status: this.#CREATED,
       statusMsg: 'Created 👌',
       data,
     });
-  }
+  };
 
-  public badRequest(res: Response, data?: any): Response {
+  public badRequest = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#BAD_REQUEST).json({
       status: this.#BAD_REQUEST,
       statusMsg: 'Bad Request 🤦',
       error: data,
     });
-  }
+  };
 
-  public notFound(res: Response, data?: any): Response {
+  public notFound = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#NOT_FOUND).json({
       status: this.#NOT_FOUND,
       statusMsg: 'Resourse Not Found 😕',
       error: data,
     });
-  }
+  };
 
-  public unauthorized(res: Response, data?: any): Response {
+  public unauthorized = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#UNAUTHORIZED).json({
       status: this.#UNAUTHORIZED,
       statusMsg: 'Unauthorized 🤖🔒',
       error: data,
     });
-  }
+  };
 
-  public forbidden(res: Response, data?: any): Response {
+  public forbidden = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#FORBIDDEN).json({
       status: this.#FORBIDDEN,
       statusMsg: '🔒 Forbidden 🔒',
       error: data,
     });
-  }
+  };
 
-  public error(res: Response, data?: any): Response {
+  public error = (res: Response, data?: any): Response => {
     if (config.getEnvironment()) console.log(data);
     return res.status(this.#INTERNAL_SERVER_ERROR).json({
       status: this.#INTERNAL_SERVER_ERROR,
       statusMsg: 'Internal Server Error 🚑',
       error: data,
     });
-  }
+  };
 }
 
 export const httpResponse = new HttpResponse();

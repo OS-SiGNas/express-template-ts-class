@@ -14,7 +14,7 @@ export class SaludoController {
     console.log(name);
 
     try {
-      const responseSaludo = await this.#service.getSaludo(`/hola/${name}`);
+      const responseSaludo = await this.#service.getSaludo(name);
       return this.#response.ok(res, { language: 'es-VE', responseSaludo });
     } catch (error) {
       console.error(error);

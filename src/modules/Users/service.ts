@@ -38,8 +38,8 @@ export class UserService {
     return response;
   };
 
-  deleteUserById = async (id: string): Promise<User | undefined> => {
-    const response: User | null = await this.#model.findByIdAndDelete(id);
+  deleteUserById = async (_id: string): Promise<User | undefined> => {
+    const response: User | null = await this.#model.findByIdAndDelete(_id);
     if (response === null) return undefined;
     return response;
   };

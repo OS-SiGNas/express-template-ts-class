@@ -10,7 +10,7 @@ export class UsersController {
     this.#service = service;
   }
 
-  login = async (req: Request, res: Response): Promise<Response> => {
+  auth = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { username, password } = req.body;
       if (username === undefined || password === undefined) return this.#response.badRequest(res);
