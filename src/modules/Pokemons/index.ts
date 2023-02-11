@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { httpResponse } from '../Response/httpResponse';
+import { httpResponse } from '../HttpResponse';
 import { PokemonController } from './controller';
 import { pokemonService } from './service';
 import { checkSession } from '../Users/middlewares';

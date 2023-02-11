@@ -1,5 +1,5 @@
 import { type Response } from 'express';
-import { config } from '../Config';
+import { config } from '../../Server/config';
 
 /* enum HttpStatus {
   OK = 200,
@@ -12,20 +12,20 @@ import { config } from '../Config';
 } */
 
 export class HttpResponse {
-  #OK: number = 200;
-  #CREATED: number = 201;
-  #BAD_REQUEST: number = 400;
-  #NOT_FOUND: number = 404;
-  #UNAUTHORIZED: number = 401;
-  #FORBIDDEN: number = 403;
-  #INTERNAL_SERVER_ERROR: number = 500;
+  readonly #OK: number = 200;
+  readonly #CREATED: number = 201;
+  readonly #BAD_REQUEST: number = 400;
+  readonly #NOT_FOUND: number = 404;
+  readonly #UNAUTHORIZED: number = 401;
+  readonly #FORBIDDEN: number = 403;
+  readonly #INTERNAL_SERVER_ERROR: number = 500;
 
   /*  #log (data: any): void { */
   /* console.log(data) */
   /* } */
 
-  public ok = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  ok = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#OK).json({
       status: this.#OK,
       statusMsg: 'Success 👌',
@@ -33,8 +33,8 @@ export class HttpResponse {
     });
   };
 
-  public created = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  created = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#CREATED).json({
       status: this.#CREATED,
       statusMsg: 'Created 👌',
@@ -42,8 +42,8 @@ export class HttpResponse {
     });
   };
 
-  public badRequest = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  badRequest = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#BAD_REQUEST).json({
       status: this.#BAD_REQUEST,
       statusMsg: 'Bad Request 🤦',
@@ -51,8 +51,8 @@ export class HttpResponse {
     });
   };
 
-  public notFound = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  notFound = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#NOT_FOUND).json({
       status: this.#NOT_FOUND,
       statusMsg: 'Resourse Not Found 😕',
@@ -60,8 +60,8 @@ export class HttpResponse {
     });
   };
 
-  public unauthorized = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  unauthorized = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#UNAUTHORIZED).json({
       status: this.#UNAUTHORIZED,
       statusMsg: 'Unauthorized 🤖🔒',
@@ -69,8 +69,8 @@ export class HttpResponse {
     });
   };
 
-  public forbidden = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  forbidden = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#FORBIDDEN).json({
       status: this.#FORBIDDEN,
       statusMsg: '🔒 Forbidden 🔒',
@@ -78,8 +78,8 @@ export class HttpResponse {
     });
   };
 
-  public error = (res: Response, data?: any): Response => {
-    if (config.getEnvironment()) console.log(data);
+  error = (res: Response, data?: any): Response => {
+    if (config.environment) console.log(data);
     return res.status(this.#INTERNAL_SERVER_ERROR).json({
       status: this.#INTERNAL_SERVER_ERROR,
       statusMsg: 'Internal Server Error 🚑',

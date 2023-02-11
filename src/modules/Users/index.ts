@@ -1,26 +1,28 @@
 import { Router } from 'express';
-import { httpResponse } from '../Response/httpResponse';
+import { type HttpResponse, httpResponse } from '../HttpResponse';
 import { UsersController } from './controller';
-import { userService } from './service';
+import { UserService, userService } from './service';
 import { checkSession } from './middlewares';
 
 class UsersRouter extends UsersController {
   router: Router;
-  constructor() {
+  constructor(httpResponse: HttpResponse, userService: UserService) {
     super(httpResponse, userService);
 
     this.router = Router();
 
-    this.router.post('/auth', this.auth);
+    this.router
+      .post('/auth', this.auth)
 
-    //middleware
-    this.router.use(checkSession);
+      //middleware
+      .use(checkSession)
 
-    this.router.get('/', this.getUsers);
-    this.router.get('/:_id', this.getOneUser);
-    this.router.put('/:_id', this.updateUser);
-    this.router.delete('/:_id', this.deleteUser);
+      .get('/users', this.getUsers)
+      .get('/users/:_id', this.getOneUser)
+      .post('/users', this.createOneUser)
+      .put('/users/:_id', this.updateUser)
+      .delete('/users/:_id', this.deleteUser);
   }
 }
 
-export const users = new UsersRouter().router;
+export const users: Router = new UsersRouter(httpResponse, userService).router;

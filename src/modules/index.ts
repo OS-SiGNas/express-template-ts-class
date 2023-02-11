@@ -1,6 +1,8 @@
-export { Server } from './Server';
-export { config, Config } from './Config';
-export { users } from './Users';
-export { saludo } from './Saludo';
-export { poke } from './Pokemons';
-// export {} from "./Movies"
+import { Router } from 'express';
+// Express Routers Objects
+import { users } from './Users';
+import { saludo } from './Saludo';
+import { poke } from './Pokemons';
+import { notFound } from './404';
+
+export const modules: Array<Router> = [notFound, users, saludo, poke];

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { config } from '../Config';
+import { config } from '../../Server/config';
 
 export class SaludoService {
   #host: string;
@@ -14,4 +14,4 @@ export class SaludoService {
   };
 }
 
-export const saludoService = new SaludoService(config.getApiSAludo());
+export const saludoService = new SaludoService(config.apiSAludo);

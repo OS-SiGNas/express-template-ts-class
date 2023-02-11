@@ -1,10 +1,10 @@
 import { type Request, type Response } from 'express';
-import { type HttpResponse } from '../Response/httpResponse';
+import { type HttpResponse } from '../HttpResponse';
 import { UserService } from './service';
 
 export class UsersController {
-  #response: HttpResponse;
-  #service: UserService;
+  readonly #response: HttpResponse;
+  readonly #service: UserService;
   constructor(httpResponse: HttpResponse, service: UserService) {
     this.#response = httpResponse;
     this.#service = service;
@@ -24,18 +24,9 @@ export class UsersController {
     }
   };
 
-  createOneUser = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const userCreated = await this.#service.createUser(req.body);
-      return this.#response.created(res, userCreated);
-    } catch (error) {
-      return this.#response.error(res, error);
-    }
-  };
-
   getOneUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
-    console.log(_id);
+    //console.log(_id);
     try {
       const user = await this.#service.getUserById(_id);
       if (user === undefined) return this.#response.notFound(res);
@@ -51,6 +42,15 @@ export class UsersController {
       const users = await this.#service.getAllUsers();
       console.log(users);
       return this.#response.ok(res, users);
+    } catch (error) {
+      return this.#response.error(res, error);
+    }
+  };
+
+  createOneUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userCreated = await this.#service.createUser(req.body);
+      return this.#response.created(res, userCreated);
     } catch (error) {
       return this.#response.error(res, error);
     }

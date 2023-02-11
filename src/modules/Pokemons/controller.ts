@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { type HttpResponse } from '../Response/httpResponse';
+import { type HttpResponse } from '../HttpResponse';
 import { PokemonService } from './service';
 
 export class PokemonController {

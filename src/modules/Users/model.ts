@@ -1,27 +1,27 @@
-import { prop, getModelForClass } from '@typegoose/typegoose'
-import { type Rol } from '../../types'
+import { prop, getModelForClass } from '@typegoose/typegoose';
+import { type Rol } from '../types';
 
 export class User {
   @prop({ required: true })
-    username: string
+  username: string;
 
   @prop({ required: true, minlength: 8 })
-    password: string
+  password: string;
 
   @prop({ required: true, trim: true })
-    email: string
+  email: string;
 
   @prop({ required: true })
-    name: string
+  name: string;
 
   @prop({ required: true })
-    telf: string
+  telf: string;
 
   @prop({ required: true })
-    active: boolean
+  active: boolean;
 
   @prop({ required: true })
-    rol: Rol[]
+  rol: Rol[];
 }
 
-export const UserModel = getModelForClass(User)
+export const UserModel = getModelForClass(User);

@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { httpResponse } from '../Response/httpResponse';
+import { type HttpResponse, httpResponse } from '../HttpResponse';
 import { SaludoController } from './controller';
-import { saludoService } from './service';
+import { type SaludoService, saludoService } from './service';
 
 class SaludoRouter extends SaludoController {
   router: Router;
-  constructor() {
+  constructor(httpResponse: HttpResponse, saludoService: SaludoService) {
     super(httpResponse, saludoService);
 
     this.router = Router();
@@ -17,4 +17,4 @@ class SaludoRouter extends SaludoController {
   }
 }
 
-export const saludo = new SaludoRouter().router;
+export const saludo = new SaludoRouter(httpResponse, saludoService).router;

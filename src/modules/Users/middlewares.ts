@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { httpResponse } from '../Response/httpResponse';
+import { httpResponse } from '../HttpResponse';
 import { userService } from './service';
 
 export const checkSession = (req: Request, res: Response, next: NextFunction): Response | undefined => {

@@ -1,11 +1,13 @@
 import { type User, UserModel } from './model';
-import { config } from '../Config';
+import { config, type Config } from '../../Server/config';
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 
 export class UserService {
-  #model: typeof UserModel;
-  constructor(model: typeof UserModel) {
+  readonly #model: typeof UserModel;
+  readonly #secretKey: string;
+  constructor(model: typeof UserModel, config: Config) {
     this.#model = model;
+    this.#secretKey = config.jwtSecretKey;
   }
 
   getUserbyUsername = async (username: string): Promise<User | undefined> => {
@@ -47,12 +49,12 @@ export class UserService {
   generateJwt = (user: User): string => {
     const { username, rol } = user;
     const payload = { username, rol };
-    const token = sign(payload, config.getJwtSecretKey(), { expiresIn: 3600 });
+    const token = sign(payload, this.#secretKey, { expiresIn: 3600 });
     return token;
   };
 
   verifyJwt = (token: string): JwtPayload | string => {
-    return verify(token, config.getJwtSecretKey());
+    return verify(token, this.#secretKey);
   };
 
   checkUserAndPassword = async (username: string, password: string): Promise<User | undefined> => {
@@ -63,4 +65,4 @@ export class UserService {
   };
 }
 
-export const userService = new UserService(UserModel);
+export const userService = new UserService(UserModel, config);

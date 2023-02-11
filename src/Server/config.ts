@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 
 export class Config {
-  #secretKey: string;
-  #port: number;
-  #dbURI: string;
-  #apiSaludo: string;
-  #environment: string;
+  readonly #secretKey: string;
+  readonly #port: number;
+  readonly #dbURI: string;
+  readonly #apiSaludo: string;
+  readonly #environment: string;
 
   constructor() {
     dotenv.config();
@@ -17,25 +17,25 @@ export class Config {
     this.#dbURI = `${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`;
   }
 
-  public getJwtSecretKey = (): string => {
+  get jwtSecretKey(): string {
     return this.#secretKey;
-  };
+  }
 
-  public getDbUri = (): string => {
+  get dbUri(): string {
     return this.#dbURI;
-  };
+  }
 
-  public getApiSAludo = (): string => {
+  get apiSAludo(): string {
     return this.#apiSaludo;
-  };
+  }
 
-  public getPort = (): number => {
+  get port(): number {
     return this.#port;
-  };
+  }
 
-  public getEnvironment = (): string => {
+  get environment(): string {
     return this.#environment;
-  };
+  }
 }
 
 export const config: Config = new Config();

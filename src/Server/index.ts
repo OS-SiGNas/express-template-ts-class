@@ -1,36 +1,32 @@
-import Express, { type Application, json } from 'express';
+import Express, { type Application, type Router, json } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-// ->
-import { type Config, users, saludo, poke } from '../index';
+import { type Config } from './config';
 
 export class Server {
-  #app: Application;
-  #port: number;
-  #dbUri: string;
-  #debug: boolean;
-  constructor(config: Config) {
+  readonly #app: Application;
+  readonly #port: number;
+  readonly #dbUri: string;
+  readonly #debug: boolean;
+  constructor(config: Config, modules: Array<Router>) {
     this.#app = Express();
-    this.#port = config.getPort();
-    this.#dbUri = config.getDbUri();
-    this.#debug = config.getEnvironment() === 'DEV';
+    this.#port = config.port;
+    this.#dbUri = config.dbUri;
+    this.#debug = config.environment === 'DEV';
+
     this.#startMidlewares();
-    this.#startModules();
+
+    this.#app.use(modules);
   }
 
   #startMidlewares = (): void => {
-    this.#app.use(this.#debug ? morgan('dev') : morgan('common'));
-    this.#app.use(cors());
-    this.#app.use(json());
-    this.#app.use(cookieParser());
-  };
-
-  #startModules = (): void => {
-    this.#app.use('/users', users);
-    this.#app.use('/pokemons', poke);
-    this.#app.use('/saludo', saludo);
+    this.#app
+      .use(this.#debug ? morgan('dev') : morgan('common'))
+      .use(cors())
+      .use(json())
+      .use(cookieParser());
   };
 
   #startDbConnection = async (): Promise<void> => {
