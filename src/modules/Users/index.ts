@@ -7,7 +7,7 @@ import { loginValidator, userModelValidator } from './schemaValidators';
 
 class UsersRouter extends UsersController {
   router: Router;
-  constructor(httpResponse: HttpResponse, userService: UserService, loginValidator: RequestHandler) {
+  constructor(httpResponse: HttpResponse, userService: UserService, checkSession: RequestHandler, loginValidator: RequestHandler) {
     super(httpResponse, userService);
 
     this.router = Router();
@@ -15,7 +15,7 @@ class UsersRouter extends UsersController {
     this.router
       .post('/auth', loginValidator, this.auth)
 
-      // => Middleware
+      // => Protected with middleware
       .use('/users', checkSession)
       .get('/users', this.getUsers)
       .get('/users/:_id', this.getOneUser)
@@ -25,4 +25,4 @@ class UsersRouter extends UsersController {
   }
 }
 
-export const users: Router = new UsersRouter(httpResponse, userService, loginValidator).router;
+export const users: Router = new UsersRouter(httpResponse, userService, checkSession, loginValidator).router;

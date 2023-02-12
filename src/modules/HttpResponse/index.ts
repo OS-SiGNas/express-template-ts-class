@@ -75,13 +75,17 @@ export class HttpResponse {
 
   forbidden = (res: Response, error?: any): Response => {
     this.#logger(error);
-    return res.status(this.#FORBIDDEN).json({ status: this.#FORBIDDEN, statusMsg: '🔒 Forbidden 🔒', error });
+    return res.status(this.#FORBIDDEN).json({
+      status: this.#FORBIDDEN,
+      statusMsg: '🔒 Forbidden 🔒',
+      error,
+    });
   };
 
   error = (res: Response, error?: any): Response => {
     this.#logger(error);
     if (error.name) {
-      return res.status(error?.status).json({
+      return res.status(error?.status || this.#INTERNAL_SERVER_ERROR).json({
         status: error?.status,
         errorType: error?.name,
         errorMsg: error?.message,

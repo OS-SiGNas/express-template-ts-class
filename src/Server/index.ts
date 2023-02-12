@@ -16,10 +16,7 @@ export class Server {
     this.#port = config.port;
     this.#dbUri = config.dbUri;
     this.#debug = config.environment === 'dev';
-    // =>
-    this.#startGlobalMidlewares();
-    this.#app.use(modules);
-    this.#app.use(errorHandler);
+    this.#init(modules);
   }
 
   #startGlobalMidlewares = (): void => {
@@ -33,6 +30,11 @@ export class Server {
   #startDbConnection = async (): Promise<void> => {
     mongoose.set('strictQuery', false);
     await mongoose.connect(this.#dbUri);
+  };
+
+  #init = (modules: Array<Router>): void => {
+    this.#startGlobalMidlewares();
+    this.#app.use(modules).use(errorHandler);
   };
 
   public run = async (): Promise<void> => {
