@@ -1,4 +1,4 @@
-import { type User, UserModel } from './model';
+import { type User, UserModel } from './users_model';
 import { config, type Config } from '../../Server/config';
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 

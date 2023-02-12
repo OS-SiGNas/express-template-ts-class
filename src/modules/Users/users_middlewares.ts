@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { httpResponse } from '../HttpResponse';
-import { userService } from './service';
+import { userService } from './users_service';
 
 export const checkSession = (req: Request, res: Response, next: NextFunction): Response | undefined => {
   const { authorization } = req.headers;
@@ -13,6 +13,7 @@ export const checkSession = (req: Request, res: Response, next: NextFunction): R
       next();
       return undefined;
     } else {
+      console.log('here');
       return httpResponse.badRequest(res, 'Missing authorization headers');
     }
   } catch (error) {

@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import { errorHandler } from '../modules/ErrorHandler';
 import { type Config } from './config';
 
 export class Server {
@@ -14,14 +15,14 @@ export class Server {
     this.#app = Express();
     this.#port = config.port;
     this.#dbUri = config.dbUri;
-    this.#debug = config.environment === 'DEV';
-
-    this.#startMidlewares();
-
+    this.#debug = config.environment === 'dev';
+    // =>
+    this.#startGlobalMidlewares();
     this.#app.use(modules);
+    this.#app.use(errorHandler);
   }
 
-  #startMidlewares = (): void => {
+  #startGlobalMidlewares = (): void => {
     this.#app
       .use(this.#debug ? morgan('dev') : morgan('common'))
       .use(cors())

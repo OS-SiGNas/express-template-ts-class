@@ -9,7 +9,7 @@ class SaludoRouter extends SaludoController {
     super(httpResponse, saludoService);
 
     this.router = Router();
-    this.router.get('/:name', this.saludar);
+    this.router.get('/saludo/:name', this.saludar);
 
     //this.router.post('/saludo', this.enseniar);
     //this.router.put('/saludo', this.aprender);

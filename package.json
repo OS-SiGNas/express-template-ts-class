@@ -5,8 +5,8 @@
   "main": "bin/index.js",
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1",
-    "dev": "export NODE_ENV=DEV && ts-node-dev src/index.ts",
-    "start": "tsc && node bin/index.js"
+    "dev": "export NODE_ENV=dev && ts-node-dev src/index.ts",
+    "start": "export NODE_ENV=prod &&tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "Alfredo Manrique",
@@ -40,6 +40,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.7",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zod": "^3.20.6"
   }
 }

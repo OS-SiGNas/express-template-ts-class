@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 import { type HttpResponse } from '../HttpResponse';
-import { UserService } from './service';
+import { UserService } from './users_service';
 
 export class UsersController {
   readonly #response: HttpResponse;
@@ -48,6 +48,7 @@ export class UsersController {
   };
 
   createOneUser = async (req: Request, res: Response): Promise<Response> => {
+    // TODO : Validar body en POST /users/
     try {
       const userCreated = await this.#service.createUser(req.body);
       return this.#response.created(res, userCreated);
