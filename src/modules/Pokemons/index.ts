@@ -15,4 +15,4 @@ class PokemonRouter extends PokemonController {
   }
 }
 
-export const poke = new PokemonRouter().router;
+export default new PokemonRouter().router;

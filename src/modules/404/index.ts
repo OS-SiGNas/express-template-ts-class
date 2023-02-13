@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { type HttpResponse, httpResponse } from '../HttpResponse';
 
-class CanNot {
+class NotFound {
   router: Router;
   #response: HttpResponse;
   constructor(httpResponse: HttpResponse) {
@@ -20,4 +20,4 @@ class CanNot {
   };
 }
 
-export const cannot = new CanNot(httpResponse).router;
+export default new NotFound(httpResponse).router;

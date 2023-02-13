@@ -3,8 +3,9 @@ import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import { errorHandler } from '../modules/ErrorHandler';
+
 import { type Config } from './config';
+import { errorHandler } from '../modules/ErrorHandler';
 
 export class Server {
   readonly #app: Application;

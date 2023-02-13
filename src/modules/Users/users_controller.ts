@@ -1,6 +1,7 @@
 import { type Request, type Response } from 'express';
 import { type HttpResponse } from '../HttpResponse';
 import { UserService } from './users_service';
+import { loginType } from './users_schemas';
 
 export class UsersController {
   readonly #response: HttpResponse;
@@ -12,7 +13,7 @@ export class UsersController {
 
   auth = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { username, password } = req.body;
+      const { username, password }: loginType = req.body;
       if (username === undefined || password === undefined) return this.#response.badRequest(res);
       const user = await this.#service.checkUserAndPassword(username, password);
       if (user === undefined) return this.#response.unauthorized(res, 'Username or password is incorrect');

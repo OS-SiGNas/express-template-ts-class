@@ -17,4 +17,4 @@ class SaludoRouter extends SaludoController {
   }
 }
 
-export const saludo = new SaludoRouter(httpResponse, saludoService).router;
+export default new SaludoRouter(httpResponse, saludoService).router;
