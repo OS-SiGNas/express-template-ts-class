@@ -1,6 +1,12 @@
 import { type User, UserModel } from './users_model';
-import { config, type Config } from '../../Server/config';
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { type Config, config } from '../../Server/config';
+import { type JwtPayload, sign, verify } from 'jsonwebtoken';
+import { type Rol } from '../types';
+
+interface Payload extends JwtPayload {
+  username: string;
+  roles: Rol[];
+}
 
 export class UserService {
   readonly #model: typeof UserModel;
@@ -11,7 +17,7 @@ export class UserService {
   }
 
   getUserbyUsername = async (username: string): Promise<User | undefined> => {
-    const response = await this.#model.findOne({ username }, ['username', 'password']);
+    const response = await this.#model.findOne({ username });
     if (response === null) return undefined;
     return response;
   };
@@ -19,7 +25,6 @@ export class UserService {
   getUserById = async (_id: string): Promise<User | undefined> => {
     const response = await this.#model.findById({ _id });
     if (response === null) return undefined;
-    console.log(response);
     return response;
   };
 
@@ -47,14 +52,16 @@ export class UserService {
   };
 
   generateJwt = (user: User): string => {
-    const { username, rol } = user;
-    const payload = { username, rol };
+    const { _id, roles } = user;
+    const payload = { _id, roles };
     const token = sign(payload, this.#secretKey, { expiresIn: 3600 });
     return token;
   };
 
-  verifyJwt = (token: string): JwtPayload | string => {
-    return verify(token, this.#secretKey);
+  verifyJwt = (token: string): Payload => {
+    const payload = <Payload | string>verify(token, this.#secretKey);
+    if (typeof payload === 'string') throw new Error('Verify token failed');
+    return payload;
   };
 
   checkUserAndPassword = async (username: string, password: string): Promise<User | undefined> => {

@@ -1,7 +1,12 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import { Types } from 'mongoose';
 import { type Rol } from '../types';
 
 export class User {
+  // =>
+  @prop({ auto: true })
+  _id: Types.ObjectId;
+
   @prop({ required: true })
   username: string;
 
@@ -20,8 +25,8 @@ export class User {
   @prop({ required: true })
   active: boolean;
 
-  @prop({ required: true })
-  rol: Rol[];
+  @prop({ type: String, required: true, default: [] })
+  roles: Types.Array<Rol>;
 }
 
 export const UserModel = getModelForClass(User);

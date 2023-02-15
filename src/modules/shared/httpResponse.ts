@@ -24,8 +24,11 @@ export class HttpResponse {
     this.#debug = debug;
   }
 
-  #logger = (data: any): void => {
-    if (this.#debug) console.dir(data);
+  #logger = (data?: any): void => {
+    if (this.#debug && data !== undefined) {
+      console.log(' 🕵️  logger => ');
+      console.dir(data);
+    }
   };
 
   ok = (res: Response, data?: any): Response => {

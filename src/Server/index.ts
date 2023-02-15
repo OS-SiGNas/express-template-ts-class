@@ -2,7 +2,7 @@ import Express, { type Application, type Router, json } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import mongoose from 'mongoose';
+import { set, connect } from 'mongoose';
 
 import { type Config } from './config';
 import { errorHandler } from '../modules/ErrorHandler';
@@ -17,6 +17,7 @@ export class Server {
     this.#port = config.port;
     this.#dbUri = config.dbUri;
     this.#debug = config.environment === 'dev';
+
     this.#init(modules);
   }
 
@@ -28,9 +29,9 @@ export class Server {
       .use(cookieParser());
   };
 
-  #startDbConnection = async (): Promise<void> => {
-    mongoose.set('strictQuery', false);
-    await mongoose.connect(this.#dbUri);
+  #startMongoConnection = async (): Promise<void> => {
+    set('strictQuery', false);
+    await connect(this.#dbUri);
   };
 
   #init = (modules: Array<Router>): void => {
@@ -40,7 +41,7 @@ export class Server {
 
   public run = async (): Promise<void> => {
     try {
-      await this.#startDbConnection();
+      await this.#startMongoConnection();
       this.#app.listen(this.#port, (): void => {
         const message = this.#debug ? '👽 DEV MODE 👽' : '🔥 ON 🔥';
         console.info(`\x1b[33m ${message}\x1b[0m\nSERVER running on: http://localhost:${this.#port}`);
