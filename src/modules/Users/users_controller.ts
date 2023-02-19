@@ -10,10 +10,10 @@ export class UsersController {
     this.#service = service;
   }
 
-  auth = async (req: Request, res: Response): Promise<Response> => {
+  protected auth = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { username, password } = req.body;
-      if (username === undefined || password === undefined) return this.#response.badRequest(res);
+      //if (username === undefined || password === undefined) return this.#response.badRequest(res);
       const user = await this.#service.checkUserAndPassword(username, password);
       if (user === undefined) return this.#response.unauthorized(res, 'Username or password is incorrect');
       const { _id, email, name, roles, telf } = user;
@@ -25,7 +25,7 @@ export class UsersController {
     }
   };
 
-  getOneUser = async (req: Request, res: Response): Promise<Response> => {
+  protected getOneUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     try {
       const user = await this.#service.getUserById(_id);
@@ -36,7 +36,7 @@ export class UsersController {
     }
   };
 
-  getUsers = async (_req: Request, res: Response): Promise<Response> => {
+  protected getUsers = async (_req: Request, res: Response): Promise<Response> => {
     try {
       const users = await this.#service.getAllUsers();
       return this.#response.ok(res, users);
@@ -45,7 +45,7 @@ export class UsersController {
     }
   };
 
-  createOneUser = async (req: Request, res: Response): Promise<Response> => {
+  protected createOneUser = async (req: Request, res: Response): Promise<Response> => {
     // TODO : Validar body en POST /users/
     try {
       const userCreated = await this.#service.createUser(req.body);
@@ -55,7 +55,7 @@ export class UsersController {
     }
   };
 
-  updateUser = async (req: Request, res: Response): Promise<Response> => {
+  protected updateUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     try {
       const user = await this.#service.updateUserById(_id, req.body);
@@ -66,7 +66,7 @@ export class UsersController {
     }
   };
 
-  deleteUser = async (req: Request, res: Response): Promise<Response> => {
+  protected deleteUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     if (_id.length < 24) return this.#response.badRequest(res, 'Argument passed in must be a 24 hex characters');
     try {

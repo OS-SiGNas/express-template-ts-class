@@ -1,5 +1,5 @@
 import { type User, UserModel } from './users_model';
-import { type Config, config } from '../../Server/config';
+import { config } from '../../Server/config';
 import { type JwtPayload, sign, verify } from 'jsonwebtoken';
 import { type Rol } from '../types';
 
@@ -11,9 +11,9 @@ interface Payload extends JwtPayload {
 export class UserService {
   readonly #model: typeof UserModel;
   readonly #secretKey: string;
-  constructor(model: typeof UserModel, config: Config) {
+  constructor(model: typeof UserModel, jwtSecretKey: string) {
     this.#model = model;
-    this.#secretKey = config.jwtSecretKey;
+    this.#secretKey = jwtSecretKey;
   }
 
   getUserbyUsername = async (username: string): Promise<User | undefined> => {
@@ -72,4 +72,4 @@ export class UserService {
   };
 }
 
-export const userService = new UserService(UserModel, config);
+export const userService = new UserService(UserModel, config.jwtSecretKey);

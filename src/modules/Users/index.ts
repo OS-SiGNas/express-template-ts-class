@@ -1,14 +1,14 @@
 import { type RequestHandler, Router } from 'express';
 import { type AnyZodObject } from 'zod';
-
+// Class dependences
 import { type HttpResponse, httpResponse } from '../shared/httpResponse';
 import { UsersController } from './users_controller';
 import { type UserService, userService } from './users_service';
-
+// Middleware
 import { checkSession } from './users_middlewares';
 import { schemaValidator } from '../shared/schemaValidator';
 import { type UserSchemas, userSchemas } from './users_schemas';
-
+// types
 import { type Rol } from '../types';
 
 class UsersRouter extends UsersController {
