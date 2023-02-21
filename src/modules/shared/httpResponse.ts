@@ -88,15 +88,17 @@ export class HttpResponse {
 
   error = (res: Response, error?: any): Response => {
     this.#logger(error);
-    if (error.name) {
-      return res.status(error?.status || this.#INTERNAL_SERVER_ERROR).json({
-        status: error?.status,
+    if (typeof error.status === 'number') {
+      res.status(error.status);
+      return res.json({
+        status: res.status,
         errorType: error?.name,
         errorMsg: error?.message,
       });
     } else {
-      return res.status(this.#INTERNAL_SERVER_ERROR).json({
-        status: this.#INTERNAL_SERVER_ERROR,
+      res.status(this.#INTERNAL_SERVER_ERROR);
+      return res.json({
+        status: res.status,
         errorMsg: 'Internal Server Error 🚑',
         error,
       });

@@ -13,9 +13,9 @@ export class UsersController {
   protected auth = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { username, password } = req.body;
-      //if (username === undefined || password === undefined) return this.#response.badRequest(res);
+      // if (username === undefined || password === undefined) return this.#response.badRequest(res);
       const user = await this.#service.checkUserAndPassword(username, password);
-      if (user === undefined) return this.#response.unauthorized(res, 'Username or password is incorrect');
+      if (user === null) return this.#response.unauthorized(res, 'Username or password is incorrect');
       const { _id, email, name, roles, telf } = user;
       const token = this.#service.generateJwt(user);
       return this.#response.ok(res, { token, _id, email, username, name, roles, telf });
@@ -29,7 +29,7 @@ export class UsersController {
     const { _id } = req.params;
     try {
       const user = await this.#service.getUserById(_id);
-      if (user === undefined) return this.#response.notFound(res);
+      if (user === null) return this.#response.notFound(res);
       return this.#response.ok(res, user);
     } catch (error) {
       return this.#response.error(res, error);
@@ -59,7 +59,7 @@ export class UsersController {
     const { _id } = req.params;
     try {
       const user = await this.#service.updateUserById(_id, req.body);
-      if (user === undefined) return this.#response.notFound(res);
+      if (user === null) return this.#response.notFound(res);
       return this.#response.ok(res, user);
     } catch (error) {
       return this.#response.error(res, error);
@@ -71,7 +71,7 @@ export class UsersController {
     if (_id.length < 24) return this.#response.badRequest(res, 'Argument passed in must be a 24 hex characters');
     try {
       const user = await this.#service.deleteUserById(_id);
-      if (user === undefined) return this.#response.notFound(res);
+      if (user === null) return this.#response.notFound(res);
       return this.#response.ok(res, 'Deleted');
     } catch (error) {
       return this.#response.error(res, error);

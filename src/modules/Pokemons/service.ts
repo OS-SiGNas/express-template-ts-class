@@ -1,16 +1,11 @@
 import fetch from 'node-fetch';
 
 export class PokemonService {
-  getPokemonByName = async (name: string) => {
+  getPokemonByName = async (name: string): Promise<Response> => {
     const endpoint = `https://pokeapi.co/api/v2/pokemon/${name}`;
-    const options = { method: 'GET' };
-    try {
-      const response = await fetch(endpoint, options);
-      const dataPokemon = await response.json();
-      return dataPokemon;
-    } catch (error) {
-      return error;
-    }
+    // const options = { method: 'GET' };
+    const response = await fetch(endpoint);
+    return await response.json();
   };
 }
 

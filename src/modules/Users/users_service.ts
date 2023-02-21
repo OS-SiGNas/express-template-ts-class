@@ -1,7 +1,11 @@
-import { type User, UserModel } from './users_model';
+import { UserModel } from './users_model';
 import { config } from '../../Server/config';
-import { type JwtPayload, sign, verify } from 'jsonwebtoken';
-import { type Rol } from '../types';
+import { sign, verify } from 'jsonwebtoken';
+
+// types
+import type { JwtPayload } from 'jsonwebtoken';
+import type { User } from './users_model';
+import type { Rol } from '../types';
 
 interface Payload extends JwtPayload {
   username: string;
@@ -16,39 +20,35 @@ export class UserService {
     this.#secretKey = jwtSecretKey;
   }
 
-  getUserbyUsername = async (username: string): Promise<User | undefined> => {
-    const response = await this.#model.findOne({ username });
-    if (response === null) return undefined;
-    return response;
+  getUserbyUsername = async (username: string): Promise<User | null> => {
+    return await this.#model.findOne({ username });
   };
 
-  getUserById = async (_id: string): Promise<User | undefined> => {
-    const response = await this.#model.findById({ _id });
-    if (response === null) return undefined;
-    return response;
+  getUserById = async (_id: string): Promise<User | null> => {
+    return await this.#model.findById({ _id });
   };
 
   getAllUsers = async (): Promise<User[]> => {
-    const response = await this.#model.find();
-    return response;
+    return await this.#model.find();
   };
 
-  createUser = async (user: typeof UserModel): Promise<User> => {
-    const newUser = new this.#model(user);
-    await newUser.save();
-    return newUser;
+  createUser = async (user: User): Promise<User> => {
+    const encryptedPassword = await this.#model.encryptPassword(user.password);
+    const newUser = new this.#model({ ...user, password: encryptedPassword });
+    return await newUser.save();
   };
 
-  updateUserById = async (_id: string, data: any): Promise<User | undefined> => {
-    const response: User | null = await this.#model.findByIdAndUpdate(_id, data, { new: true });
-    if (response === null) return undefined;
-    return response;
+  updateUserById = async (_id: string, data: User): Promise<User | null> => {
+    // TODO: test
+    if (data.password !== undefined) {
+      const passwordEncrypted = await this.#model.encryptPassword(data.password);
+      data.password = passwordEncrypted;
+    }
+    return await this.#model.findByIdAndUpdate(_id, data, { new: true });
   };
 
-  deleteUserById = async (_id: string): Promise<User | undefined> => {
-    const response: User | null = await this.#model.findByIdAndDelete(_id);
-    if (response === null) return undefined;
-    return response;
+  deleteUserById = async (_id: string): Promise<User | null> => {
+    return await this.#model.findByIdAndDelete(_id);
   };
 
   generateJwt = (user: User): string => {
@@ -59,15 +59,18 @@ export class UserService {
   };
 
   verifyJwt = (token: string): Payload => {
-    const payload = <Payload | string>verify(token, this.#secretKey);
+    // TODO: test Login
+    const payload = verify(token, this.#secretKey) as Payload | string;
     if (typeof payload === 'string') throw new Error('Verify token failed');
     return payload;
   };
 
-  checkUserAndPassword = async (username: string, password: string): Promise<User | undefined> => {
+  checkUserAndPassword = async (username: string, password: string): Promise<User | null> => {
     const userMatched = await this.getUserbyUsername(username);
-    if (userMatched === undefined) return undefined;
-    if (userMatched.password !== password) return undefined;
+    if (userMatched === null) return null;
+    // if (userMatched.password !== password) return null;
+    const equals = await this.#model.comparePassword(password, userMatched.password);
+    if (!equals) return null;
     return userMatched;
   };
 }

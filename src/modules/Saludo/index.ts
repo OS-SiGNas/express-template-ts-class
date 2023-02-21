@@ -11,9 +11,9 @@ class SaludoRouter extends SaludoController {
     this.router = Router();
     this.router.get('/saludo/:name', this.saludar);
 
-    //this.router.post('/saludo', this.enseniar);
-    //this.router.put('/saludo', this.aprender);
-    //this.router.delete('/saludo', this.olvidar);
+    // this.router.post('/saludo', this.enseniar);
+    // this.router.put('/saludo', this.aprender);
+    // this.router.delete('/saludo', this.olvidar);
   }
 }
 

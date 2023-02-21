@@ -14,7 +14,7 @@ export class Config {
     this.#port = Number(PORT);
     this.#secretKey = String(JWT_SECRET);
     this.#apiSaludo = String(API_SALUDO);
-    this.#dbURI = `${MONGO_URI_HEADER}${MONGO_PASS}${MONGO_CLUSTER}`;
+    this.#dbURI = `${String(MONGO_URI_HEADER)}${String(MONGO_PASS)}${String(MONGO_CLUSTER)}`;
   }
 
   get jwtSecretKey(): string {

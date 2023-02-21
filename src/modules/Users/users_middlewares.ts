@@ -2,7 +2,7 @@ import { type Request, type Response, type NextFunction, type RequestHandler } f
 import { httpResponse } from '../shared/httpResponse';
 import { userService } from './users_service';
 
-import { Rol } from '../types';
+import { type Rol } from '../types';
 
 export const checkSession =
   (rol: Rol): RequestHandler =>
@@ -13,7 +13,7 @@ export const checkSession =
     try {
       const payload = userService.verifyJwt(String(token));
       if (payload.roles.includes(rol)) {
-        //console.log(`Welcome ${rol}`);
+        // console.log(`Welcome ${rol}`);
         req.body.dataToken = payload;
         next();
         return undefined;

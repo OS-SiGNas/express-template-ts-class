@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { SaludoService } from './service';
+import { type Request, type Response } from 'express';
+import { type SaludoService } from './service';
 import { type HttpResponse } from '../shared/httpResponse';
 
 export class SaludoController {
@@ -9,6 +9,7 @@ export class SaludoController {
     this.#response = httpResponse;
     this.#service = saludoService;
   }
+
   saludar = async (req: Request, res: Response): Promise<Response> => {
     const { name } = req.params;
     console.log(name);

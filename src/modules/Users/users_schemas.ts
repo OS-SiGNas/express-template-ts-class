@@ -10,14 +10,14 @@ export class UserSchemas {
     this.loginSchema = z.object({
       body: z.object({
         username: z.string(),
-        password: z.string().min(10, 'Password need 10 chars'),
+        password: z.string().min(10, 'Password need minimun 10 chars'),
       }),
     });
 
     this.createUserSchema = z.object({
       body: z.object({
         username: z.string(),
-        password: z.string(),
+        password: z.string().min(10, 'Password need minimun 10 chars'),
         email: z.string().email(),
         name: z.string(),
         telf: z.string(),
@@ -29,7 +29,7 @@ export class UserSchemas {
     this.updateUserSchema = z.object({
       body: z.object({
         username: z.string().optional(),
-        password: z.string().optional(),
+        password: z.string().min(10, 'Password need minimun 10 chars').optional(),
         email: z.string().email().optional(),
         name: z.string().optional(),
         telf: z.string().optional(),

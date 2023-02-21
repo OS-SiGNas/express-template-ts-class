@@ -1,18 +1,19 @@
-import Express, { type Application, type Router, json } from 'express';
+import Express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import { set, connect } from 'mongoose';
 
-import { type Config } from './config';
-import { errorHandler } from '../modules/ErrorHandler';
+// types
+import type { Application } from 'express';
+import type { Modules } from '../modules/types';
+import type { Config } from './config';
 
 export class Server {
   readonly #app: Application;
   readonly #port: number;
   readonly #dbUri: string;
   readonly #debug: boolean;
-  constructor(config: Config, modules: Array<Router>) {
+  constructor(config: Config, modules: Modules) {
     this.#app = Express();
     this.#port = config.port;
     this.#dbUri = config.dbUri;
@@ -21,22 +22,21 @@ export class Server {
     this.#init(modules);
   }
 
-  #startGlobalMidlewares = (): void => {
-    this.#app
-      .use(this.#debug ? morgan('dev') : morgan('common'))
-      .use(cors())
-      .use(json())
-      .use(cookieParser());
-  };
-
-  #startMongoConnection = async (): Promise<void> => {
+  readonly #startMongoConnection = async (): Promise<void> => {
     set('strictQuery', false);
     await connect(this.#dbUri);
   };
 
-  #init = (modules: Array<Router>): void => {
+  readonly #startGlobalMidlewares = (): void => {
+    this.#app
+      .use(this.#debug ? morgan('dev') : morgan('common'))
+      .use(Express.json())
+      .use(cors());
+  };
+
+  readonly #init = (modules: Modules): void => {
     this.#startGlobalMidlewares();
-    this.#app.use(modules).use(errorHandler);
+    this.#app.use(modules);
   };
 
   public run = async (): Promise<void> => {

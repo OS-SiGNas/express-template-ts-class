@@ -1,5 +1,6 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
+import { compare, genSalt, hash } from 'bcryptjs';
 import { type Rol } from '../types';
 
 export class User {
@@ -7,13 +8,13 @@ export class User {
   @prop({ auto: true })
   _id: Types.ObjectId;
 
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   username: string;
 
   @prop({ required: true, minlength: 8 })
   password: string;
 
-  @prop({ required: true, trim: true })
+  @prop({ required: true, trim: true, unique: true })
   email: string;
 
   @prop({ required: true })
@@ -27,6 +28,17 @@ export class User {
 
   @prop({ type: String, required: true, default: [] })
   roles: Types.Array<Rol>;
+
+  // TODO: constructor for inyection dependences
+
+  public static encryptPassword = async (password: string): Promise<string> => {
+    const salt = await genSalt(10);
+    return await hash(password, salt);
+  };
+
+  public static comparePassword = async (password: string, receivedPassword: string): Promise<boolean> => {
+    return await compare(password, receivedPassword);
+  };
 }
 
 export const UserModel = getModelForClass(User);
