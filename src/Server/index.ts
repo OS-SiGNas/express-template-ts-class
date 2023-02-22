@@ -22,6 +22,10 @@ export class Server {
     this.#init(modules);
   }
 
+  get app(): Application {
+    return this.#app;
+  }
+
   readonly #startMongoConnection = async (): Promise<void> => {
     set('strictQuery', false);
     await connect(this.#dbUri);

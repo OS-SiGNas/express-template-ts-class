@@ -38,13 +38,13 @@ export class UserService {
     return await newUser.save();
   };
 
-  updateUserById = async (_id: string, data: User): Promise<User | null> => {
+  updateUserById = async (_id: string, user: User): Promise<User | null> => {
     // TODO: test
-    if (data.password !== undefined) {
-      const passwordEncrypted = await this.#model.encryptPassword(data.password);
-      data.password = passwordEncrypted;
+    if (user.password !== undefined) {
+      const passwordEncrypted = await this.#model.encryptPassword(user.password);
+      user.password = passwordEncrypted;
     }
-    return await this.#model.findByIdAndUpdate(_id, data, { new: true });
+    return await this.#model.findByIdAndUpdate(_id, user, { new: true });
   };
 
   deleteUserById = async (_id: string): Promise<User | null> => {
