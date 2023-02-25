@@ -1,3 +1,6 @@
+# linux directory
+.directory
+
 # Logs
 logs
 *.log
