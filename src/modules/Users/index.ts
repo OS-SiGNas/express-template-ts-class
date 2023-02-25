@@ -12,7 +12,7 @@ import { type UserSchemas, userSchemas } from './users_schemas';
 import { type Rol } from '../types';
 
 class UsersRouter extends UsersController {
-  router: Router;
+  readonly #router: Router;
   constructor(
     httpResponse: HttpResponse,
     userService: UserService,
@@ -22,10 +22,10 @@ class UsersRouter extends UsersController {
   ) {
     super(httpResponse, userService);
 
-    this.router = Router();
+    this.#router = Router();
     const { loginSchema, getOneUserSchema, deleteUserSchema, createUserSchema, updateUserSchema } = userSchemas;
 
-    this.router
+    this.#router
       .post('/auth', schemaValidator(loginSchema), this.auth)
 
       // => Protected routes with middleware
@@ -36,6 +36,10 @@ class UsersRouter extends UsersController {
       .post('/users', schemaValidator(createUserSchema), this.createOneUser)
       .put('/users/:_id', schemaValidator(updateUserSchema), this.updateUser)
       .delete('/users/:_id', schemaValidator(deleteUserSchema), this.deleteUser);
+  }
+
+  get router(): Router {
+    return this.#router;
   }
 }
 

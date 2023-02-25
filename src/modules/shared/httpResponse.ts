@@ -1,7 +1,8 @@
 import { type Response } from 'express';
 import { config } from '../../Server/config';
 
-/* enum HttpStatus {
+/*
+enum HttpStatus {
   OK = 200,
   CREATED = 201,
   BAD_REQUEST = 400,
@@ -9,7 +10,8 @@ import { config } from '../../Server/config';
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   INTERNAL_SERVER_ERROR = 500,
-} */
+}
+*/
 
 export class HttpResponse {
   readonly #OK: number = 200;

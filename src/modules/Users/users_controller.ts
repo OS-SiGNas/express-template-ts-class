@@ -11,9 +11,8 @@ export class UsersController {
   }
 
   protected auth = async (req: Request, res: Response): Promise<Response> => {
+    const { username, password } = req.body;
     try {
-      const { username, password } = req.body;
-      // if (username === undefined || password === undefined) return this.#response.badRequest(res);
       const user = await this.#service.checkUserAndPassword(username, password);
       if (user === null) return this.#response.unauthorized(res, 'Username or password is incorrect');
       const { _id, email, name, roles, telf } = user;
@@ -68,7 +67,6 @@ export class UsersController {
 
   protected deleteUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
-    if (_id.length < 24) return this.#response.badRequest(res, 'Argument passed in must be a 24 hex characters');
     try {
       const user = await this.#service.deleteUserById(_id);
       if (user === null) return this.#response.notFound(res);

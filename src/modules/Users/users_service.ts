@@ -39,7 +39,6 @@ export class UserService {
   };
 
   updateUserById = async (_id: string, user: User): Promise<User | null> => {
-    // TODO: test
     if (user.password !== undefined) {
       const passwordEncrypted = await this.#model.encryptPassword(user.password);
       user.password = passwordEncrypted;
@@ -59,7 +58,6 @@ export class UserService {
   };
 
   verifyJwt = (token: string): Payload => {
-    // TODO: test Login
     const payload = verify(token, this.#secretKey) as Payload | string;
     if (typeof payload === 'string') throw new Error('Verify token failed');
     return payload;
@@ -68,7 +66,6 @@ export class UserService {
   checkUserAndPassword = async (username: string, password: string): Promise<User | null> => {
     const userMatched = await this.getUserbyUsername(username);
     if (userMatched === null) return null;
-    // if (userMatched.password !== password) return null;
     const equals = await this.#model.comparePassword(password, userMatched.password);
     if (!equals) return null;
     return userMatched;
