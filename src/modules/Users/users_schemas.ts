@@ -9,7 +9,7 @@ export class UserSchemas {
   constructor() {
     this.loginSchema = z.object({
       body: z.object({
-        username: z.string(),
+        username: z.string().min(1, 'username can`t be empty'),
         password: z.string().min(10, 'Password need minimun 10 chars'),
       }),
     });

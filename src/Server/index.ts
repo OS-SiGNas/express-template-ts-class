@@ -12,18 +12,15 @@ export class Server {
   readonly #app: Application;
   readonly #port: number;
   readonly #dbUri: string;
-  readonly #debug: boolean;
+  readonly #environment: string;
   constructor(config: Config, modules: Modules) {
     this.#app = Express();
     this.#port = config.port;
     this.#dbUri = config.dbUri;
-    this.#debug = config.environment === 'dev';
+    this.#environment = config.environment;
 
+    // init main method
     this.#init(modules);
-  }
-
-  get app(): Application {
-    return this.#app;
   }
 
   readonly #startMongoConnection = async (): Promise<void> => {
@@ -33,7 +30,7 @@ export class Server {
 
   readonly #startGlobalMidlewares = (): void => {
     this.#app
-      .use(this.#debug ? morgan('dev') : morgan('common'))
+      .use(this.#environment === 'dev' ? morgan('dev') : morgan('common'))
       .use(Express.json())
       .use(cors());
   };
@@ -43,15 +40,27 @@ export class Server {
     this.#app.use(modules);
   };
 
-  public run = async (): Promise<void> => {
+  public readonly run = async (): Promise<void> => {
+    const message = (): string => {
+      if (this.#environment === 'prod') return '🔥 ON 🔥';
+      if (this.#environment === 'dev') return '👽 DEV MODE 👽';
+      if (this.#environment === 'test') return '🕵️ TEST MODE 🪲';
+      return '';
+    };
+
+    this.#app.listen(this.#port, (): void => {
+      console.info(`\x1b[33m ${message()}\x1b[0m\nSERVER running on: http://localhost:${this.#port}`);
+    });
+
     try {
       await this.#startMongoConnection();
-      this.#app.listen(this.#port, (): void => {
-        const message = this.#debug ? '👽 DEV MODE 👽' : '🔥 ON 🔥';
-        console.info(`\x1b[33m ${message}\x1b[0m\nSERVER running on: http://localhost:${this.#port}`);
-      });
     } catch (error) {
       console.error(error);
     }
   };
-}
+
+  public get app(): Application | undefined {
+    if (this.#environment === 'test') return this.#app;
+    return undefined;
+  }
+} // <- end

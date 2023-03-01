@@ -11,14 +11,16 @@ import type { NotesSchemas } from './notes_schemas';
 import type { HttpResponse } from '../shared/httpResponse';
 import type { Rol } from '../types';
 
+interface Dependences {
+  httpResponse: HttpResponse;
+  checkSession: (arg: Rol) => RequestHandler;
+  schemaValidator: (arg: AnyZodObject) => RequestHandler;
+  notesSchemas: NotesSchemas;
+}
+
 class NotesRouter extends NotesController {
   readonly #router: Router;
-  constructor(
-    httpResponse: HttpResponse,
-    checkSession: (arg: Rol) => RequestHandler,
-    schemaValidator: (arg: AnyZodObject) => RequestHandler,
-    notesSchemas: NotesSchemas
-  ) {
+  constructor({ httpResponse, checkSession, schemaValidator, notesSchemas }: Dependences) {
     super(httpResponse);
 
     const { getNoteSchema, getNotesSchema, postNoteSchema, putNoteSchema, deleteNoteSchema } = notesSchemas;
@@ -40,4 +42,4 @@ class NotesRouter extends NotesController {
   }
 }
 
-export default new NotesRouter(httpResponse, checkSession, schemaValidator, notesSchemas).router;
+export default new NotesRouter({ httpResponse, checkSession, schemaValidator, notesSchemas }).router;

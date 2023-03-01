@@ -13,9 +13,8 @@ export const schemaValidator =
         httpResponse.badRequest(res, {
           errorMsg: error?.issues.map((issues) => ({
             errorType: issues.code,
-            // path: issues.path[0],
-            path: issues.path,
             message: issues.message,
+            path: issues.path,
           })),
         });
       } else {

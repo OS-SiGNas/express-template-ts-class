@@ -29,7 +29,7 @@ export class HttpResponse {
   #logger = (data?: any): void => {
     if (this.#debug && data !== undefined) {
       console.log('======================  🕵️ logger  ======================');
-      console.dir(data);
+      console.log(data);
       console.log('====================== end logger ======================');
     }
   };
