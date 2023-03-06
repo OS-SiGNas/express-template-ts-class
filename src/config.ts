@@ -1,8 +1,22 @@
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
+
+config();
+
+const {
+  NODE_ENV,
+  PORT,
+  JWT_SECRET,
+  MONGO_URI_HEADER,
+  MONGO_PASS,
+  MONGO_CLUSTER,
+  API_SALUDO,
+  USER_TEST_USERNAME,
+  USER_TEST_PASSWORD,
+} = process.env;
 
 export class Config {
   readonly #environment: string | undefined;
-  readonly #port: number;
+  readonly #port: string | undefined;
   readonly #mongoUriHeader: string | undefined;
   readonly #mongoPass: string | undefined;
   readonly #mongoCluster: string | undefined;
@@ -11,26 +25,13 @@ export class Config {
   readonly #usernameTestUser: string | undefined;
   readonly #passwordTestUser: string | undefined;
   constructor() {
-    dotenv.config();
-    const {
-      NODE_ENV,
-      PORT,
-      JWT_SECRET,
-      MONGO_URI_HEADER,
-      MONGO_PASS,
-      MONGO_CLUSTER,
-      API_SALUDO,
-      USER_TEST_USERNAME,
-      USER_TEST_PASSWORD,
-    } = process.env;
-
     this.#environment = NODE_ENV;
-    this.#port = PORT === undefined ? 3000 : Number(PORT);
+    this.#port = PORT;
     this.#mongoUriHeader = MONGO_URI_HEADER;
     this.#mongoPass = MONGO_PASS;
     this.#mongoCluster = MONGO_CLUSTER;
-    this.#secretKey = String(JWT_SECRET);
-    this.#apiSaludo = String(API_SALUDO);
+    this.#secretKey = JWT_SECRET;
+    this.#apiSaludo = API_SALUDO;
     this.#usernameTestUser = USER_TEST_USERNAME;
     this.#passwordTestUser = USER_TEST_PASSWORD;
   }
@@ -41,7 +42,8 @@ export class Config {
   }
 
   get port(): number {
-    return this.#port;
+    if (this.#port === undefined) return 3000;
+    return +this.#port;
   }
 
   get dbUri(): string {
@@ -73,4 +75,3 @@ export class Config {
 }
 
 export default new Config();
-
