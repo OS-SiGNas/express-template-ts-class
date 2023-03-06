@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { type HttpResponse, httpResponse } from '../shared/httpResponse';
+import { httpResponse } from '../shared';
+import type HttpResponse from "../shared/HttpResponse";
 import { SaludoController } from './controller';
 import { type SaludoService, saludoService } from './service';
 

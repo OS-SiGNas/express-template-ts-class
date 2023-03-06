@@ -1,30 +1,36 @@
 import type { Request, Response } from 'express';
-import type { HttpResponse } from '../shared/httpResponse';
-import type { UserService } from './users_service';
+import type HttpResponse from '../shared/HttpResponse';
+import type { IAuthWithJwtService, IUserService } from './types';
+interface Dependences {
+  httpResponse: HttpResponse;
+  userService: IUserService;
+  authService: IAuthWithJwtService;
+}
 
-export class UsersController {
+export default class UsersController {
   readonly #response: HttpResponse;
-  readonly #service: UserService;
-  constructor(httpResponse: HttpResponse, service: UserService) {
+  readonly #service: IUserService;
+  readonly #authService: IAuthWithJwtService;
+  constructor({ httpResponse, userService, authService }: Dependences) {
     this.#response = httpResponse;
-    this.#service = service;
+    this.#service = userService;
+    this.#authService = authService;
   }
 
-  protected auth = async (req: Request, res: Response): Promise<Response> => {
+  auth = async (req: Request, res: Response): Promise<Response> => {
     const { username, password } = req.body;
     try {
       const user = await this.#service.checkUserAndPassword(username, password);
       if (user === null) return this.#response.unauthorized(res, 'Username or password is incorrect');
       const { _id, email, name, roles, telf } = user;
-      const token = this.#service.generateJwt(user);
+      const token = this.#authService.generateJwt(user);
       return this.#response.ok(res, { token, _id, email, username, name, roles, telf });
     } catch (error) {
-      console.error(error);
       return this.#response.error(res, error);
     }
   };
 
-  protected getOneUser = async (req: Request, res: Response): Promise<Response> => {
+  getOneUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     try {
       const user = await this.#service.getUserById(_id);
@@ -35,7 +41,7 @@ export class UsersController {
     }
   };
 
-  protected getUsers = async (_req: Request, res: Response): Promise<Response> => {
+  getUsers = async (_req: Request, res: Response): Promise<Response> => {
     try {
       const users = await this.#service.getAllUsers();
       return this.#response.ok(res, users);
@@ -44,8 +50,7 @@ export class UsersController {
     }
   };
 
-  protected createOneUser = async (req: Request, res: Response): Promise<Response> => {
-    // TODO : Validar body en POST /users/
+  createOneUser = async (req: Request, res: Response): Promise<Response> => {
     try {
       const userCreated = await this.#service.createUser(req.body);
       return this.#response.created(res, userCreated);
@@ -54,7 +59,7 @@ export class UsersController {
     }
   };
 
-  protected updateUser = async (req: Request, res: Response): Promise<Response> => {
+  updateUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     try {
       const user = await this.#service.updateUserById(_id, req.body);
@@ -65,7 +70,7 @@ export class UsersController {
     }
   };
 
-  protected deleteUser = async (req: Request, res: Response): Promise<Response> => {
+  deleteUser = async (req: Request, res: Response): Promise<Response> => {
     const { _id } = req.params;
     try {
       const user = await this.#service.deleteUserById(_id);
@@ -76,3 +81,4 @@ export class UsersController {
     }
   };
 }
+

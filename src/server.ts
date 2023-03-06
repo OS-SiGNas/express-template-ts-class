@@ -2,11 +2,13 @@ import Express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import { set, connect } from 'mongoose';
+import config from './config';
+import modules from './modules';
 
 // types
 import type { Application } from 'express';
-import type { Modules } from '../modules/types';
 import type { Config } from './config';
+import type { Modules } from './modules/types';
 
 export class Server {
   readonly #app: Application;
@@ -64,3 +66,6 @@ export class Server {
     return undefined;
   }
 } // <- end
+
+export default new Server(config, modules);
+

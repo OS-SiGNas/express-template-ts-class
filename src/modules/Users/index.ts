@@ -1,46 +1,18 @@
-import { type RequestHandler, Router } from 'express';
-import { type AnyZodObject } from 'zod';
-// Class dependences
-import { type HttpResponse, httpResponse } from '../shared/httpResponse';
-import { UsersController } from './users_controller';
-import { type UserService, userService } from './users_service';
-// Middleware
-import { checkSession } from './users_middlewares';
-import { schemaValidator } from '../shared/schemaValidator';
-import { type UserSchemas, userSchemas } from './users_schemas';
-// types
-import { type Rol } from '../types';
+import UsersRouter from './users_router';
+import UsersController from './users_controller';
+import UserService from './users_service';
+import AuthSerice from './auth_service';
+import UsersMiddleware from './users_middlewares';
 
-class UsersRouter extends UsersController {
-  readonly #router: Router;
-  constructor(
-    httpResponse: HttpResponse,
-    userService: UserService,
-    checkSession: (arg: Rol) => RequestHandler,
-    schemaValidator: (arg: AnyZodObject) => RequestHandler,
-    userSchemas: UserSchemas
-  ) {
-    super(httpResponse, userService);
+import config from '../../config';
+import { UserModel } from './users_model';
+import { httpResponse, schemaValidator } from '../shared';
+import { userSchemas } from './users_schemas';
 
-    this.#router = Router();
-    const { loginSchema, getOneUserSchema, deleteUserSchema, createUserSchema, updateUserSchema } = userSchemas;
+const userService = new UserService(UserModel);
+const authService = new AuthSerice(config.jwtSecretKey);
+const usersController = new UsersController({ httpResponse, userService, authService });
+export const { checkSession } = new UsersMiddleware(authService.verifyJwt);
 
-    this.#router
-      .post('/auth', schemaValidator(loginSchema), this.auth)
-
-      // => Protected routes with middleware
-      .use('/users', checkSession('admin'))
-
-      .get('/users', this.getUsers)
-      .get('/users/:_id', schemaValidator(getOneUserSchema), this.getOneUser)
-      .post('/users', schemaValidator(createUserSchema), this.createOneUser)
-      .put('/users/:_id', schemaValidator(updateUserSchema), this.updateUser)
-      .delete('/users/:_id', schemaValidator(deleteUserSchema), this.deleteUser);
-  }
-
-  get router(): Router {
-    return this.#router;
-  }
-}
-
-export default new UsersRouter(httpResponse, userService, checkSession, schemaValidator, userSchemas).router;
+// Module User
+export default new UsersRouter({ usersController, checkSession, schemaValidator, userSchemas }).router;

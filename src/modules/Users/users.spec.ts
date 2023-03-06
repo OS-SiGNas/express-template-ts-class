@@ -1,6 +1,6 @@
 import req from 'supertest';
 import app from '../../index';
-import { config } from '../../Server/config';
+import config from '../../config';
 
 const headers = { Authorization: '' };
 let userId = '';
@@ -84,7 +84,7 @@ describe('Tesing Users enpoints', () => {
       userId = res.body.data[0]._id;
     });
 
-    test('GET, POST, PUT and DELETE need _id param with 24 hex characters /users', async () => {
+    test('GET, PUT and DELETE need _id param with 24 hex characters /users', async () => {
       const resGet = await req(app).get('/users/asda').set(headers);
       expect(resGet.status).toBe(400);
       expect(resGet.body.error.errorMsg[0].errorType).toEqual('too_small');

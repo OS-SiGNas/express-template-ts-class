@@ -1,9 +1,10 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
 import { compare, genSalt, hash } from 'bcryptjs';
-import { type Rol } from '../types';
 
-export class User {
+import type { Rol, IUser } from '../Users/types';
+
+export class User implements IUser {
   // =>
   @prop({ auto: true })
   _id: Types.ObjectId;

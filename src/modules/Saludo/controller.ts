@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 import { type SaludoService } from './service';
-import { type HttpResponse } from '../shared/httpResponse';
+import type HttpResponse from "../shared/HttpResponse";
 
 export class SaludoController {
   #response: HttpResponse;

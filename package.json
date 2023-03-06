@@ -4,9 +4,10 @@
   "description": "",
   "main": "bin/index.js",
   "scripts": {
-    "test": "export NODE_ENV=test && jest --detectOpenHandles",
+    "start": "export NODE_ENV=prod && node bin/index.js",
     "dev": "export NODE_ENV=dev && ts-node-dev src/index.ts",
-    "start": "export NODE_ENV=prod &&tsc && node bin/index.js"
+    "build": "tsc",
+    "test": "export NODE_ENV=test && jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "Alfredo Manrique",

@@ -1,11 +1,11 @@
 import { type AnyZodObject, z } from 'zod';
 
 export class UserSchemas {
-  loginSchema: AnyZodObject;
-  createUserSchema: AnyZodObject;
-  updateUserSchema: AnyZodObject;
-  getOneUserSchema: AnyZodObject;
-  deleteUserSchema: AnyZodObject;
+  readonly loginSchema: AnyZodObject;
+  readonly createUserSchema: AnyZodObject;
+  readonly updateUserSchema: AnyZodObject;
+  readonly getOneUserSchema: AnyZodObject;
+  readonly deleteUserSchema: AnyZodObject;
   constructor() {
     this.loginSchema = z.object({
       body: z.object({
