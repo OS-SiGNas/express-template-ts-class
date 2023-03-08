@@ -1,8 +1,8 @@
 import { sign, verify } from 'jsonwebtoken';
 
-import type { IUser, IAuthWithJwtService, Payload } from './types';
+import type { IUser, Payload } from './types';
 
-export default class AuthSerice implements IAuthWithJwtService {
+export default class AuthSerice {
   readonly #secretKey: string;
   constructor(secretKey: string) {
     this.#secretKey = secretKey;

@@ -10,9 +10,9 @@ import { httpResponse, schemaValidator } from '../shared';
 import { userSchemas } from './users_schemas';
 
 const userService = new UserService(UserModel);
-const authService = new AuthSerice(config.jwtSecretKey);
-const usersController = new UsersController({ httpResponse, userService, authService });
-export const { checkSession } = new UsersMiddleware(authService.verifyJwt);
+const { generateJwt, verifyJwt } = new AuthSerice(config.jwtSecretKey);
+const usersController = new UsersController({ httpResponse, userService, generateJwt });
+export const { checkSession } = new UsersMiddleware(verifyJwt);
 
 // Module User
 export default new UsersRouter({ usersController, checkSession, schemaValidator, userSchemas }).router;

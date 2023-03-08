@@ -1,20 +1,20 @@
 import type { Request, Response } from 'express';
 import type HttpResponse from '../shared/HttpResponse';
-import type { IAuthWithJwtService, IUserService } from './types';
+import type { IUser, IUserService } from './types';
 interface Dependences {
-  httpResponse: HttpResponse;
-  userService: IUserService;
-  authService: IAuthWithJwtService;
+  readonly httpResponse: HttpResponse;
+  readonly userService: IUserService;
+  readonly generateJwt: (user: IUser) => string;
 }
 
 export default class UsersController {
   readonly #response: HttpResponse;
   readonly #service: IUserService;
-  readonly #authService: IAuthWithJwtService;
-  constructor({ httpResponse, userService, authService }: Dependences) {
+  readonly #generateJwt: (user: IUser) => string;
+  constructor({ httpResponse, userService, generateJwt }: Dependences) {
     this.#response = httpResponse;
     this.#service = userService;
-    this.#authService = authService;
+    this.#generateJwt = generateJwt;
   }
 
   auth = async (req: Request, res: Response): Promise<Response> => {
@@ -23,7 +23,7 @@ export default class UsersController {
       const user = await this.#service.checkUserAndPassword(username, password);
       if (user === null) return this.#response.unauthorized(res, 'Username or password is incorrect');
       const { _id, email, name, roles, telf } = user;
-      const token = this.#authService.generateJwt(user);
+      const token = this.#generateJwt(user);
       return this.#response.ok(res, { token, _id, email, username, name, roles, telf });
     } catch (error) {
       return this.#response.error(res, error);
@@ -81,4 +81,3 @@ export default class UsersController {
     }
   };
 }
-
