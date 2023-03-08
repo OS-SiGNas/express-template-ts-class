@@ -1,4 +1,4 @@
-import ValidatorMiddleware from './schemaValidator';
+import ValidatorMiddleware from './SchemaValidatorMiddleware';
 import HttpResponse from './HttpResponse';
 import config from '../../config';
 

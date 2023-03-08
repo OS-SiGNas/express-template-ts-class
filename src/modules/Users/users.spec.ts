@@ -11,30 +11,30 @@ describe('Tesing Users enpoints', () => {
       const res = await req(app).post('/auth').send({ password: '' });
       expect(res.status).toBe(400);
       expect(res.body.error).toBeDefined();
-      expect(res.body.error.errorMsg[0].errorType).toEqual('invalid_type');
+      expect(res.body.error[0].errorType).toEqual('invalid_type');
     });
 
     test('password is required', async () => {
       const res = await req(app).post('/auth').send({ username: 'anyuser' });
       expect(res.status).toBe(400);
       expect(res.body.error).toBeDefined();
-      expect(res.body.error.errorMsg[0].errorType).toEqual('invalid_type');
+      expect(res.body.error[0].errorType).toEqual('invalid_type');
     });
 
     test('username can`t be empty', async () => {
       const res = await req(app).post('/auth').send({ username: '', password: '' });
       expect(res.status).toBe(400);
       expect(res.body.error).toBeDefined();
-      expect(res.body.error.errorMsg[0].errorType).toEqual('too_small');
-      expect(res.body.error.errorMsg[0].message).toEqual('username can`t be empty');
-      expect(res.body.error.errorMsg[1].errorType).toEqual('too_small');
+      expect(res.body.error[0].errorType).toEqual('too_small');
+      expect(res.body.error[0].message).toEqual('username can`t be empty');
+      expect(res.body.error[1].errorType).toEqual('too_small');
     });
 
     test('too small password, need at least 10 characters', async () => {
       const res = await req(app).post('/auth').send({ username: 'anyuser', password: '123456789' });
       expect(res.status).toBe(400);
       expect(res.body.error).toBeDefined();
-      expect(res.body.error.errorMsg[0].errorType).toEqual('too_small');
+      expect(res.body.error[0].errorType).toEqual('too_small');
     });
 
     test('incorrect username or password', async () => {
@@ -87,15 +87,15 @@ describe('Tesing Users enpoints', () => {
     test('GET, PUT and DELETE need _id param with 24 hex characters /users', async () => {
       const resGet = await req(app).get('/users/asda').set(headers);
       expect(resGet.status).toBe(400);
-      expect(resGet.body.error.errorMsg[0].errorType).toEqual('too_small');
+      expect(resGet.body.error[0].errorType).toEqual('too_small');
 
       const resPut = await req(app).put('/users/asda').set(headers);
       expect(resPut.status).toBe(400);
-      expect(resPut.body.error.errorMsg[0].errorType).toEqual('too_small');
+      expect(resPut.body.error[0].errorType).toEqual('too_small');
 
       const resDelete = await req(app).delete('/users/asda').set(headers);
       expect(resDelete.status).toBe(400);
-      expect(resDelete.body.error.errorMsg[0].errorType).toEqual('too_small');
+      expect(resDelete.body.error[0].errorType).toEqual('too_small');
     });
 
     test('GET user [0] in DB /users', async () => {

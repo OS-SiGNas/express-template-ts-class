@@ -9,8 +9,9 @@ import modules from './modules';
 import type { Application } from 'express';
 import type { Config } from './config';
 import type { Modules } from './modules/types';
+import type { IServer } from './types';
 
-export class Server {
+class Server implements IServer {
   readonly #app: Application;
   readonly #port: number;
   readonly #dbUri: string;
@@ -25,24 +26,24 @@ export class Server {
     this.#init(modules);
   }
 
-  readonly #startMongoConnection = async (): Promise<void> => {
+  #startMongoConnection = async (): Promise<void> => {
     set('strictQuery', false);
     await connect(this.#dbUri);
   };
 
-  readonly #startGlobalMidlewares = (): void => {
+  #startGlobalMidlewares = (): void => {
     this.#app
       .use(this.#environment === 'dev' ? morgan('dev') : morgan('common'))
       .use(Express.json())
       .use(cors());
   };
 
-  readonly #init = (modules: Modules): void => {
+  #init = (modules: Modules): void => {
     this.#startGlobalMidlewares();
     this.#app.use(modules);
   };
 
-  public readonly run = async (): Promise<void> => {
+  public run = async (): Promise<void> => {
     const message = (): string => {
       if (this.#environment === 'prod') return '🔥 ON 🔥';
       if (this.#environment === 'dev') return '👽 DEV MODE 👽';
@@ -68,4 +69,3 @@ export class Server {
 } // <- end
 
 export default new Server(config, modules);
-
