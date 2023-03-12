@@ -1,11 +1,11 @@
 // Express Routers Objects
-import users from './Users';
-import saludo from './Saludo';
-import poke from './Pokemons';
-import notes from './Notes';
+import users from './users';
+import saludo from './saludo';
+import poke from './pokemons';
+import notes from './notes';
 // last
 import notFound from './404';
-import { errorHandler } from './ErrorHandler';
+import { errorHandler } from './errorHandler';
 // types
 import type { Modules } from './types';
 

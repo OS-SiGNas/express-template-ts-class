@@ -1,9 +1,12 @@
-import { Router, type Request, type Response } from 'express';
+import { Router } from 'express';
+
+import type { Request, Response } from 'express';
 
 class NotFound {
   router: Router;
   constructor() {
     this.router = Router();
+
     this.router
       .get('/', this.#noEndpoint)
 

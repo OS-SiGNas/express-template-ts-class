@@ -17,12 +17,12 @@ export default class ValidatorMiddleware {
         next();
       } catch (error) {
         if (error instanceof ZodError) {
-          const errorMsg = error.issues.map((issues) => ({
+          const errors = error.issues.map((issues) => ({
             errorType: issues.code,
             message: issues.message,
             path: issues.path,
           }));
-          this.#response.badRequest(res, errorMsg);
+          this.#response.badRequest(res, errors);
         } else {
           this.#response.error(res, error);
         }
@@ -30,4 +30,3 @@ export default class ValidatorMiddleware {
     };
   };
 }
-
