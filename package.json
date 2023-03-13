@@ -6,8 +6,11 @@
   "scripts": {
     "start": "export NODE_ENV=prod && node bin/index.js",
     "dev": "export NODE_ENV=dev && ts-node-dev --poll src/index.ts",
-    "build": "tsc",
-    "test": "export NODE_ENV=test && jest --detectOpenHandles"
+    "test": "export NODE_ENV=test && jest --detectOpenHandles",
+    "start:win": "set NODE_ENV=prod && node bin/index.js",
+    "dev:win": "set NODE_ENV=dev && ts-node-dev --poll src/index.ts",
+    "test:win": "set NODE_ENV=test && jest --detectOpenHandles",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "Alfredo Manrique",
@@ -20,7 +23,6 @@
     "@types/jsonwebtoken": "^9.0.0",
     "@types/morgan": "^1.9.3",
     "@types/node-fetch": "^2.6.2",
-    "@types/sequelize": "^4.28.14",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "eslint": "^8.32.0",
