@@ -59,15 +59,6 @@ USER_TEST_PASSWORD=
 │   │   ├── errorHandler
 │   │   │   └── index.ts
 │   │   ├── index.ts
-│   │   ├── notes
-│   │   │   ├── index.ts
-│   │   │   ├── NotesController.ts
-│   │   │   ├── NotesModel.ts
-│   │   │   ├── NotesRouter.ts
-│   │   │   ├── NotesSchema.ts
-│   │   │   ├── NotesService.ts
-│   │   │   ├── notes.spec.ts
-│   │   │   └── types.d.ts
 │   │   ├── shared
 │   │   │   ├── HttpResponse.ts
 │   │   │   ├── SchemaValidatorMiddleware.ts
