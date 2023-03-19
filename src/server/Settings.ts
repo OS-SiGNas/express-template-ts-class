@@ -1,22 +1,7 @@
-import dotenv from 'dotenv';
-import type { IConfig } from './types';
+import type { Environment, ISettings } from './types';
 
-dotenv.config();
-
-const {
-  NODE_ENV,
-  PORT,
-  JWT_SECRET,
-  MONGO_URI_HEADER,
-  MONGO_PASS,
-  MONGO_CLUSTER,
-  API_SALUDO,
-  USER_TEST_USERNAME,
-  USER_TEST_PASSWORD,
-} = process.env;
-
-class Config implements IConfig {
-  readonly #environment: string | undefined;
+export default class Settings implements ISettings {
+  readonly #environment: Environment | undefined;
   readonly #port: string | undefined;
   readonly #mongoUriHeader: string | undefined;
   readonly #mongoPass: string | undefined;
@@ -25,9 +10,20 @@ class Config implements IConfig {
   readonly #apiSaludo: string | undefined;
   readonly #usernameTestUser: string | undefined;
   readonly #passwordTestUser: string | undefined;
-  constructor() {
+  constructor(env: NodeJS.ProcessEnv) {
+    const {
+      NODE_ENV,
+      PORT,
+      JWT_SECRET,
+      MONGO_URI_HEADER,
+      MONGO_PASS,
+      MONGO_CLUSTER,
+      API_SALUDO,
+      USER_TEST_USERNAME,
+      USER_TEST_PASSWORD,
+    } = env;
     // console.log('===============config===============')
-    this.#environment = NODE_ENV;
+    this.#environment = NODE_ENV as Environment | undefined;
     this.#port = PORT;
     this.#mongoUriHeader = MONGO_URI_HEADER;
     this.#mongoPass = MONGO_PASS;
@@ -38,13 +34,13 @@ class Config implements IConfig {
     this.#passwordTestUser = USER_TEST_PASSWORD;
   }
 
-  get environment(): string {
+  get environment(): Environment {
     if (this.#environment === undefined) throw new Error('NODE_ENV is undefined');
     return this.#environment;
   }
 
   get port(): number {
-    if (this.#port === undefined) return 3000;
+    if (this.#port === undefined) return 0;
     return +this.#port;
   }
 
@@ -65,8 +61,9 @@ class Config implements IConfig {
     return this.#apiSaludo;
   }
 
-  get testUserData(): { username: string; password: string } {
-    if (this.#environment !== 'test') throw new Error('testUserData is only available in test mode');
+  get testUserData(): { username: string; password: string } | undefined {
+    // if (this.#environment !== 'test') throw new Error('testUserData is only available in test mode');
+    if (this.#environment !== 'test') return undefined;
     if (this.#usernameTestUser === undefined) throw new Error('undefined USER_TEST_USERNAME in .env');
     if (this.#passwordTestUser === undefined) throw new Error('undefined USER_TEST_PASSWORD in .env');
     return {
@@ -75,5 +72,3 @@ class Config implements IConfig {
     };
   }
 }
-
-export const config = new Config();

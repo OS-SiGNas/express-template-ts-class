@@ -1,25 +1,26 @@
-import mongoose from 'mongoose';
-import { config } from './config';
+import type { Mongoose } from 'mongoose';
 import type { DatabaseHandler } from './types';
 
-class Mongo implements DatabaseHandler {
+export default class Mongo implements DatabaseHandler {
   #uri: string;
-  constructor(uri: string) {
+  #mongoose: Mongoose;
+  constructor(mongoose: Mongoose, uri: string) {
+    this.#mongoose = mongoose;
     this.#uri = uri;
     this.#events();
   }
 
   connect = async (): Promise<void> => {
-    mongoose.set('strictQuery', false);
-    await mongoose.connect(this.#uri);
+    this.#mongoose.set('strictQuery', false);
+    await this.#mongoose.connect(this.#uri);
   };
 
   #events = (): void => {
-    mongoose.connection.on('connecting', this.#isConnecting);
-    mongoose.connection.on('connected', this.#isConnected);
-    mongoose.connection.on('reconnected', this.#isReconnected);
-    mongoose.connection.on('close', this.#isClose);
-    mongoose.connection.on('error', this.#isError);
+    this.#mongoose.connection.on('connecting', this.#isConnecting);
+    this.#mongoose.connection.on('connected', this.#isConnected);
+    this.#mongoose.connection.on('reconnected', this.#isReconnected);
+    this.#mongoose.connection.on('close', this.#isClose);
+    this.#mongoose.connection.on('error', this.#isError);
   };
 
   #isConnected = (): void => {
@@ -42,8 +43,6 @@ class Mongo implements DatabaseHandler {
     console.log('==> Mongo connection is closed ');
   };
 }
-
-export const mongo = new Mongo(config.dbUri);
 
 /*
 connecting: Emitted when Mongoose starts making its initial connection to the MongoDB server
