@@ -1,10 +1,16 @@
 import type { Application, RequestHandler } from 'express';
+import type { IServer, Environment, DatabaseHandler } from './types';
 import type { Modules } from '../modules/types';
-import type { IServer, DatabaseHandler } from './types';
+
+interface HttpServer {
+  close: () => void;
+  address: () => unknown;
+}
+
 interface Dependences {
-  environment: 'dev' | 'test' | 'prod';
   app: Application;
   port: number;
+  environment: Environment;
   mongo: DatabaseHandler;
   middlewares: RequestHandler[];
   modules: Modules;
@@ -15,7 +21,8 @@ export default class Server implements IServer {
   readonly #port: number;
   readonly #mongo: DatabaseHandler;
   readonly #environment: string;
-  constructor({ environment, app, port, mongo, middlewares, modules }: Dependences) {
+  #httpServer: HttpServer;
+  constructor({ app, port, environment, mongo, middlewares, modules }: Dependences) {
     this.#environment = environment;
     this.#app = app;
     this.#port = port;
@@ -25,14 +32,9 @@ export default class Server implements IServer {
     this.#app.use(modules);
   }
 
-  #message = (): string => {
-    if (this.#environment === 'dev') return '👽 DEV MODE 👽';
-    if (this.#environment === 'test') return '🕵️  TEST MODE 🪲';
-    return '🔥 ON 🔥';
-  };
-
   public run = async (): Promise<void> => {
-    const { port } = this.#app.listen(this.#port).address() as { port: number };
+    this.#httpServer = this.#app.listen(this.#port);
+    const { port } = this.#httpServer.address() as { port: number };
     console.info(`\x1b[33m${this.#message()}\x1b[0m\nSERVER running on: http://localhost:${port}`);
     try {
       await this.#mongo.connect();
@@ -41,8 +43,21 @@ export default class Server implements IServer {
     }
   };
 
+  #message = (): string => {
+    if (this.#environment === 'dev') return '👽 DEV MODE 👽';
+    if (this.#environment === 'test') return '🕵️  TEST MODE 🪲';
+    return '🔥 ON 🔥';
+  };
+
+  /**
+   * test getters
   public get app(): Application | undefined {
-    if (this.#environment === 'test') return this.#app;
-    return undefined;
+    if (this.#environment !== 'test') return undefined;
+    return this.#app;
   }
+
+  public get httpServer(): HttpServer | undefined {
+    if (this.#environment !== 'test') return undefined;
+    return this.#httpServer;
+  } */
 }

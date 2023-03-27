@@ -31,14 +31,15 @@ JWT_SECRET=
 PORT=
 
 #DATABASE
-MONGO_PASS=...
-MONGO_URI_HEADER=mongodb+srv://username:...
+MONGO_URI_HEADER=mongodb+srv://username:password
 MONGO_CLUSTER=@cluster0...
 
 #Test user for Jest testing
 USER_TEST_USERNAME=
 USER_TEST_PASSWORD=
 ```
+
+### pd: if port is undefined express will default to a random free port
 
 ## Tree
 
@@ -54,15 +55,15 @@ USER_TEST_PASSWORD=
 ├── src
 │   ├── index.ts
 │   ├── modules
+│   │   ├── index.ts
+│   │   ├── types.d.ts
 │   │   ├── 404
 │   │   │   └── index.ts
 │   │   ├── errorHandler
 │   │   │   └── index.ts
-│   │   ├── index.ts
 │   │   ├── shared
 │   │   │   ├── HttpResponse.ts
-│   │   │   ├── SchemaValidatorMiddleware.ts
-│   │   ├── types.d.ts
+│   │   │   └─── SchemaValidatorMiddleware.ts
 │   │   └── users
 │   │       ├── AuthService.ts
 │   │       ├── index.ts
@@ -75,9 +76,10 @@ USER_TEST_PASSWORD=
 │   │       ├── UsersService.ts
 │   │       └── users.spec.ts
 │   └── server
-│       ├── config.ts
 │       ├── index.ts
-│       ├── mongo.ts
+│       ├── Mongo.ts
+│       ├── Server.ts
+│       ├── Settings.ts
 │       └── types.d.ts
 └── tsconfig.json
 ```
@@ -86,11 +88,13 @@ USER_TEST_PASSWORD=
 
 ### 1 - src/index.ts entry point with an IIFE
 
-### 2 - Initial server configuration such as environment variables are loaded into the config object in src/server/config.ts
+### 2 - Initial server configuration such as environment variables are loaded into the config object in src/server/Settings.ts
 
-### 3 - Express configuration and modules are loaded into the server object in src/server/index.ts
+### 3 - Express configuration and modules are loaded into the server object in src/server/Server.ts
 
-### 4 - All modules in the src/modules folder should export an object of type Express.Router and include them in the array declared in the src/modules/index.ts file, will be automatically exported and included in the server object.
+### 4 - All implementation and instances for http server will to be created in src/server/index.ts
+
+### 5 - All modules in the src/modules folder should export an object of type Express.Router and include them in the array declared in the src/modules/index.ts file, will be automatically exported and included in the server object.
 
 ```
 /***************************************************************
@@ -111,7 +115,8 @@ const modules: Modules = [users,notes, saludo, poke, otherRouterObject];
 7: types.d
 8: index
 
-// with this organization it is possible to move all the files referring to a module dragging only one folder, instead of looking for them in a giant tree of directories
+/*  with this organization it is possible to move all the files referring to a module
+    dragging only one folder, instead of looking for them in a giant tree of directories */
 ```
 
 ## 6 - in the folder src/modules/share en la carpeta share estan las clases compartidas por todos los modulos, como la clase HttpResponse o el ValidadorSchemas.

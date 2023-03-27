@@ -2,9 +2,9 @@ import { prop, getModelForClass } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
 import { compare, genSalt, hash } from 'bcryptjs';
 
-import type { Rol, IUser } from './types';
+import type { Rol, IUser } from '../types';
 
-export class User implements IUser {
+class User implements IUser {
   // =>
   @prop({ auto: true })
   _id: Types.ObjectId;
@@ -40,4 +40,5 @@ export class User implements IUser {
   };
 }
 
-export const UsersModel = getModelForClass(User);
+const UsersModel = getModelForClass(User);
+export default UsersModel;

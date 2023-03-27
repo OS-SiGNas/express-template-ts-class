@@ -1,7 +1,7 @@
 import { ZodError } from 'zod';
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type HttpResponse from './HttpResponse';
+import type { HttpResponse } from './HttpResponse';
 import type { AnyZodObject } from 'zod';
 
 export default class ValidatorMiddleware {
@@ -11,10 +11,11 @@ export default class ValidatorMiddleware {
   }
 
   schemaValidator = (schema: AnyZodObject): RequestHandler => {
-    return (req: Request, res: Response, next: NextFunction): void => {
+    return (req: Request, res: Response, next: NextFunction): undefined | Response => {
       try {
         schema.parse({ body: req.body, params: req.params, query: req.query });
         next();
+        return undefined;
       } catch (error) {
         if (error instanceof ZodError) {
           const errors = error.issues.map((issues) => ({
@@ -22,10 +23,8 @@ export default class ValidatorMiddleware {
             message: issues.message,
             path: issues.path,
           }));
-          this.#response.badRequest(res, errors);
-        } else {
-          this.#response.error(res, error);
-        }
+          return this.#response.unprocessable(res, errors);
+        } else return this.#response.error(res, error);
       }
     };
   };

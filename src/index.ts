@@ -9,4 +9,4 @@ import type { IServer } from './server/types';
 /*  If environment is different than 'test'
     server.app will return undefined
 */
-export default server.app;
+// export default server.httpServer;

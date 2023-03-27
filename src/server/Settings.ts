@@ -1,37 +1,29 @@
+import dotenv from 'dotenv';
+
+import type { SignOptions } from 'jsonwebtoken';
 import type { Environment, ISettings } from './types';
 
-export default class Settings implements ISettings {
+dotenv.config();
+
+class Settings implements ISettings {
   readonly #environment: Environment | undefined;
   readonly #port: string | undefined;
   readonly #mongoUriHeader: string | undefined;
-  readonly #mongoPass: string | undefined;
   readonly #mongoCluster: string | undefined;
   readonly #secretKey: string | undefined;
   readonly #apiSaludo: string | undefined;
   readonly #usernameTestUser: string | undefined;
   readonly #passwordTestUser: string | undefined;
   constructor(env: NodeJS.ProcessEnv) {
-    const {
-      NODE_ENV,
-      PORT,
-      JWT_SECRET,
-      MONGO_URI_HEADER,
-      MONGO_PASS,
-      MONGO_CLUSTER,
-      API_SALUDO,
-      USER_TEST_USERNAME,
-      USER_TEST_PASSWORD,
-    } = env;
     // console.log('===============config===============')
-    this.#environment = NODE_ENV as Environment | undefined;
-    this.#port = PORT;
-    this.#mongoUriHeader = MONGO_URI_HEADER;
-    this.#mongoPass = MONGO_PASS;
-    this.#mongoCluster = MONGO_CLUSTER;
-    this.#secretKey = JWT_SECRET;
-    this.#apiSaludo = API_SALUDO;
-    this.#usernameTestUser = USER_TEST_USERNAME;
-    this.#passwordTestUser = USER_TEST_PASSWORD;
+    this.#environment = env.NODE_ENV as Environment | undefined;
+    this.#port = env.PORT;
+    this.#mongoUriHeader = env.MONGO_URI_HEADER;
+    this.#mongoCluster = env.MONGO_CLUSTER;
+    this.#secretKey = env.JWT_SECRET;
+    this.#apiSaludo = env.API_SALUDO;
+    this.#usernameTestUser = env.USER_TEST_USERNAME;
+    this.#passwordTestUser = env.USER_TEST_PASSWORD;
   }
 
   get environment(): Environment {
@@ -46,9 +38,8 @@ export default class Settings implements ISettings {
 
   get dbUri(): string {
     if (this.#mongoUriHeader === undefined) throw new Error('undefined MONGO_URI_HEADER in .env');
-    if (this.#mongoPass === undefined) throw new Error('undefined MONGO_PASS in .env');
     if (this.#mongoCluster === undefined) throw new Error('undefined MONGO_CLUSTER in .env');
-    return `${this.#mongoUriHeader}${this.#mongoPass}${this.#mongoCluster}`;
+    return `${this.#mongoUriHeader}${this.#mongoCluster}`;
   }
 
   get jwtSecretKey(): string {
@@ -56,6 +47,14 @@ export default class Settings implements ISettings {
     return this.#secretKey;
   }
 
+  get jwtSignOptions(): SignOptions {
+    return {
+      expiresIn: 3600,
+    };
+  }
+
+  /**
+   * any example api for test */
   get apiSaludo(): string {
     if (this.#apiSaludo === undefined) throw new Error('undefined API_SALUDO in .env');
     return this.#apiSaludo;
@@ -72,3 +71,7 @@ export default class Settings implements ISettings {
     };
   }
 }
+
+export const { environment, port, dbUri, jwtSecretKey, jwtSignOptions, apiSaludo, testUserData } = new Settings(
+  process.env
+);
