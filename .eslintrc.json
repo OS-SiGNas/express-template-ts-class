@@ -4,11 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "standard-with-typescript",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
+  "extends": ["standard-with-typescript", "plugin:@typescript-eslint/recommended", "prettier"],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -18,7 +14,7 @@
   },
   "plugins": [],
   "rules": {
-    "@typescript-eslint/array-type":"off",
+    "@typescript-eslint/array-type": "off",
     "@typescript-eslint/no-misused-promises": "off"
   }
 }

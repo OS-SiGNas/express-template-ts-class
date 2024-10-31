@@ -1,12 +1,14 @@
-import { server } from './server';
+import { exit } from 'node:process';
+import { servers } from './Infrastructure/index.js';
 
-import type { IServer } from './server/types';
+import type { IServer } from './Domain/IServer';
 
-(function (server: IServer) {
-  void server.run();
-})(server);
-
-/*  If environment is different than 'test'
-    server.app will return undefined
-*/
-// export default server.httpServer;
+void (async (servers: IServer[]): Promise<void> => {
+  try {
+    for (const server of servers) await server.start();
+  } catch (error) {
+    console.trace(error);
+    for (const server of servers) server.stop();
+    exit(1);
+  }
+})(servers);
