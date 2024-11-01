@@ -1,5 +1,5 @@
 import { env, loadEnvFile } from 'node:process';
-import { Logger } from '../Applications/shared/logger-handler/make.js';
+import { Logger } from '../Applications/logger-handler/make.js';
 
 export type Environment = 'development' | 'production' | 'test';
 export type HttpService = 'express' | 'fastify';

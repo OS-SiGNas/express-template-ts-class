@@ -1,5 +1,5 @@
-import { errorHandler } from '../../../../Applications/shared/error-handler/make.js';
-import { Logger } from '../../../../Applications/shared/logger-handler/make.js';
+import { errorHandler } from '../../../../Applications/error-handler/make.js';
+import { Logger } from '../../../../Applications/logger-handler/make.js';
 
 import type { ErrorRequestHandler } from 'express';
 
