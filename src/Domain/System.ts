@@ -59,8 +59,7 @@ class System {
   public readonly getAsyncSecrets = async (): Promise<Readonly<Secrets>> => {
     if (this.#cacheSecrets === undefined) {
       /** Implement async handle secrets service
-      const strategy = this.#getAsyncSecretStrategy('AWS')
-      this.#cacheSecrets = await strategy() */
+      this.#cacheSecrets ??= await (this.#getAsyncSecretStrategy('AWS')).?() */
       this.#cacheSecrets = this.SECRETS;
     }
 
